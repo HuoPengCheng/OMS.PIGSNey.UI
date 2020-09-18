@@ -2,6 +2,55 @@
 @{
     ViewData["Title"] = "KeHu";
 }
-    <script src="~/js/vue.js"></script>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
 <h1>KeHu</h1>
 
+<div id="app">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>账号</td>
+                <td>手机号</td>
+                <td>类型</td>
+                <td>理由</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr v-for="i in item">
+                <td>{{i.uName}}</td>
+                <td>{{i.uAccount}}</td>
+                <td>{{i.uPhone}}</td>
+                <td>{{i.type}}</td>
+                <td>{{i.reason}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "",
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                    var ch = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/KeHu?uid=12')
+                        .then(function (i) {
+                            ch.message = i.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
+            }
+        });
+    </script>
+}
