@@ -27,12 +27,12 @@
             </tr>
         </thead>
         <tbody v-for="item in message">
-            <tr v-for="i in item">
-                <td>{{i.uName}}</td>
-                <td>{{i.uAccount}}</td>
-                <td>{{i.uPhone}}</td>
-                <td>{{i.type}}</td>
-                <td>{{i.reason}}</td>
+            <tr >
+                <td>{{item.uName}}</td>
+                <td>{{item.uAccount}}</td>
+                <td>{{item.uPhone}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.reason}}</td>
                 <td><input id="Button1" type="button" value="删除" /></td>
             </tr>
         </tbody>
@@ -44,13 +44,13 @@
             <col>
         </colgroup>
         <tr>
-            <td>共有<span id="Zonggongtiaoshu"></span>条数据</td>
-            <td>共有<span id="Zonggongyeshu"></span>页</td>
-            <td>当前是第<span id="Dangpianyeshu"></span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="Show(1)" class="layui-btn layui-btn-sm" /></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Show(dangqian-1)" class="layui-btn layui-btn-sm" /></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Show(dangqian+1)" class="layui-btn layui-btn-sm" /></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Show(zongyeshu)" class="layui-btn layui-btn-sm" /></td>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
 </div>
@@ -60,6 +60,10 @@
             el: "#app",
             data: {
                 message: "",
+                meiyetiaoshu: 2,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu:1
             },
             mounted() {
                 this.Show();
@@ -67,23 +71,52 @@
             methods: {
                 Show: function () {
                     var ch = this;
+                    var i = ch.dangqianye;
+                    var m = ch.meiyetiaoshu
                     var n = ch.name;
                     axios
                         .get('http://localhost:65300/api/Center/KeHu', {
                             params: {
-                                uid:12,
+                                uid: 12,
                                 name: n,
-                                dangqianye:1
+                                dangqianye: i,
+                                meiyetiaoshu: m
                             }
                         })
                         .then(function (i) {
-                            ch.message = i.data;
-                            ch.zongyeshu = i.data.zongyeshu;
+                            ch.message = i.data.masd;
+                           ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongtiaoshu = i.data.zongtiaoshu;
+                            ch.dangqianye = i.data.dangqianye;
                         }).catch(function (error) {
                             console.log(error);
                         })
                 },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                Del: function () {
 
+                }
 
             }
         });
