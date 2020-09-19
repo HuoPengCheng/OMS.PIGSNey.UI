@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table>
+    <tr>
+        <td>
+            账号:
+            <input id="Text1" type="text" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            密码:
+            <input id="Password1" type="password" />
+            <input id="Text2" type="text" />
+            <input id="Button2" type="button" value="button" onclick="yzm()" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            验证码:
+            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="Button1" type="button" value="登录" onclick="Deng()" />
+        </td>
+    </tr>
+</table>
+<script>
+    function yzm() {
+        $.ajax({
+            url: "http://api.feige.ee/SmsService/Template",
+            type: "post",
+            dataType: "json",
+            success: function (d) {
+              
+            }
+
+        })
+    }
+    function Deng() {
+        $.ajax({
+            url: "http://localhost:65300/api/Denglu",
+            data: { name: $("#Text1").val(), pass: $("#Password1").val() },
+            type: "get",
+            dataType: "json",
+            success: function (d) {
+                if (d > 0) {
+                    alert("登录成功");
+                }
+                else {
+                    alert("登录失败");
+                }
+            }
+
+        })
+    }
+</script>
