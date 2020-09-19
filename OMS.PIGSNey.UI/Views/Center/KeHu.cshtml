@@ -33,7 +33,7 @@
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.reason}}</td>
-                <td><input id="Button1" type="button" value="删除" /></td>
+                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.Urdid)" /></td>
             </tr>
         </tbody>
     </table>
@@ -63,7 +63,8 @@
                 meiyetiaoshu: 2,
                 dangqianye: 1,
                 zongyeshu: 1,
-                zongtiaoshu:1
+                zongtiaoshu: 1,
+                del:0
             },
             mounted() {
                 this.Show();
@@ -114,8 +115,23 @@
                     this.dangqianye = this.zongyeshu;
                     this.Show();
                 },
-                Del: function () {
-
+                Del: function (id) {
+                    var hh = this;
+                    if (confirm('确定要删除？')) {
+                        axios
+                            .delete('http://localhost:65300/api/Center/KDel?id='+id)
+                            .then(function (i) {
+                                hh.del = parseInt(i.data.masd);
+                                if (parseInt(i.data.masd) > 0) {
+                                    alert('删除成功！！');
+                                    this.Show();
+                                }
+                                else {
+                                    alert('删除失败！！');
+                                }
+                            })
+                    }
+                    
                 }
 
             }
