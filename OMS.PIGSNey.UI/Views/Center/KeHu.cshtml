@@ -27,13 +27,13 @@
             </tr>
         </thead>
         <tbody v-for="item in message">
-            <tr >
+            <tr>
                 <td>{{item.uName}}</td>
                 <td>{{item.uAccount}}</td>
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.reason}}</td>
-                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.Urdid)" /></td>
+                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /></td>
             </tr>
         </tbody>
     </table>
@@ -64,7 +64,8 @@
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                del:0
+                del: 0,
+                name:""
             },
             mounted() {
                 this.Show();
@@ -121,10 +122,10 @@
                         axios
                             .delete('http://localhost:65300/api/Center/KDel?id='+id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data.masd);
-                                if (parseInt(i.data.masd) > 0) {
+                                hh.del = parseInt(i.data);
+                                if (hh.del > 0) {
                                     alert('删除成功！！');
-                                    this.Show();
+                                    location.href = 'http://localhost:49485/Center/KeHu';
                                 }
                                 else {
                                     alert('删除失败！！');
