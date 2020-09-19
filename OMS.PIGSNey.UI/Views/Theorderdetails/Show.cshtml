@@ -67,10 +67,9 @@
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                UId:0,
-                Name: "",
-                StrTime: "",
-                EndTime: "",
+                name: "",
+                st: "",
+                et: "",
             },
             mounted() {
                 this.Show();
@@ -93,19 +92,17 @@
                         .then(function (i) {
                             //alert("123");
                             //for (var j = 0; j < i.data.zongtiaoshu - 1; j++) {
-                            //    alert("123");
-                            //    if (i.data.masd[j].degree == 1) {
+                            //    if (i.data.masd[j].degree == "1") {
                             //        i.data.masd[j].degree = "日常";
                             //    }
-                            //    else if (i.data.masd[j].degree == 2) {
+                            //    else if (i.data.masd[j].degree == "2") {
                             //        i.data.masd[j].degree = "应急";
                             //    }
                             //    else {
                             //        i.data.masd[j].degree = "紧急";
                             //    }
                             //}
-                            //alert("123");
-                            alert(i.data.masd[0].ordernumber);
+                            //alert(i.data.masd[0].ordernumber);
                             t.emps = i.data.masd;
                             t.zongyeshu = i.data.zongyeshu;
                             t.zongtiaoshu = i.data.zongtiaoshu;
@@ -120,19 +117,18 @@
                     this.Show();
                 },
                 Prv: function () {
-                    this.dangqianye = this.dangqianye--;
+                    this.dangqianye--;
                     if (this.dangqianye<1) {
                         alert("已经是第一页了");
-                        return;
+                        this.dangqianye++;
                     }
                     this.Show();
                 },
                 Next: function () {
-                    alert(dangqianye);
-                    this.dangqianye = this.dangqianye++;
+                    this.dangqianye++;
                     if (this.dangqianye > this.zongyeshu) {
                         alert("已经是第一页了");
-                        return;
+                        this.dangqianye--;
                     }
                     this.Show();
                 },
