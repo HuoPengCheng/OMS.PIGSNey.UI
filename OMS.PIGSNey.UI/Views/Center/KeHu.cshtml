@@ -27,13 +27,14 @@
             </tr>
         </thead>
         <tbody v-for="item in message">
-            <tr >
+            <tr>
                 <td>{{item.uName}}</td>
                 <td>{{item.uAccount}}</td>
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.reason}}</td>
-                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.Urdid)" /></td>
+                <td>{{item.urdId}}</td>
+                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /></td>
             </tr>
         </tbody>
     </table>
@@ -121,7 +122,8 @@
                         axios
                             .delete('http://localhost:65300/api/Center/KDel?id='+id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data.masd);
+                                hh.del = parseInt(i.data);
+                                alert(hh.del);
                                 if (parseInt(i.data.masd) > 0) {
                                     alert('删除成功！！');
                                     this.Show();
