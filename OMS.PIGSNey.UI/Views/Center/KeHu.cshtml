@@ -33,7 +33,6 @@
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.urdId}}</td>
                 <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /></td>
             </tr>
         </tbody>
@@ -65,7 +64,8 @@
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                del:0
+                del: 0,
+                name:""
             },
             mounted() {
                 this.Show();
@@ -123,10 +123,9 @@
                             .delete('http://localhost:65300/api/Center/KDel?id='+id)
                             .then(function (i) {
                                 hh.del = parseInt(i.data);
-                                alert(hh.del);
-                                if (parseInt(i.data.masd) > 0) {
+                                if (hh.del > 0) {
                                     alert('删除成功！！');
-                                    this.Show();
+                                    location.href = 'http://localhost:49485/Center/KeHu';
                                 }
                                 else {
                                     alert('删除失败！！');
