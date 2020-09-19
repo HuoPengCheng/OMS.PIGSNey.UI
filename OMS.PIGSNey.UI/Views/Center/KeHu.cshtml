@@ -9,6 +9,13 @@
 
 <div id="app">
     <table class="table table-bordered">
+        <tr>
+            <td>类型</td>
+            <td><input id="name" v-model="name" type="text" /></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+        </tr>
+    </table>
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <td>姓名</td>
@@ -16,6 +23,7 @@
                 <td>手机号</td>
                 <td>类型</td>
                 <td>理由</td>
+                <td>操作</td>
             </tr>
         </thead>
         <tbody v-for="item in message">
@@ -25,8 +33,25 @@
                 <td>{{i.uPhone}}</td>
                 <td>{{i.type}}</td>
                 <td>{{i.reason}}</td>
+                <td><input id="Button1" type="button" value="删除" /></td>
             </tr>
         </tbody>
+    </table>
+    <table class="table table-bordered">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span id="Zonggongtiaoshu"></span>条数据</td>
+            <td>共有<span id="Zonggongyeshu"></span>页</td>
+            <td>当前是第<span id="Dangpianyeshu"></span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="Show(1)" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Show(dangqian-1)" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Show(dangqian+1)" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Show(zongyeshu)" class="layui-btn layui-btn-sm" /></td>
+        </tr>
     </table>
 </div>
 @section scripts{
@@ -42,14 +67,24 @@
             methods: {
                 Show: function () {
                     var ch = this;
+                    var n = ch.name;
                     axios
-                        .get('http://localhost:65300/api/Center/KeHu?uid=12')
+                        .get('http://localhost:65300/api/Center/KeHu', {
+                            params: {
+                                uid:12,
+                                name: n,
+                                dangqianye:1
+                            }
+                        })
                         .then(function (i) {
                             ch.message = i.data;
+                            ch.zongyeshu = i.data.zongyeshu;
                         }).catch(function (error) {
                             console.log(error);
-                        });
+                        })
                 },
+
+
             }
         });
     </script>
