@@ -4,15 +4,98 @@
 }
 
 <h1>Show</h1>
-<table>
-    <thead>
+<div id="app">
+    <table class="table table-bordered">
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>开始日期</td>
+            <td><input id="Text1" type="date"  class="form-control"/></td>
+            <td>-</td>
+            <td>结束日期</td>
+            <td><input id="Text1" type="date" class="form-control" /></td>
+            <td><input id="Text1" type="text" placeholder="根据商品订单查询" /></td>
+            <td><input id="Button1" type="button" value="查询" /></td>
         </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>订单编号</td>
+                <td>商品类型</td>
+                <td>商品型号</td>
+                <td>维修等级</td>
+                <td>维修理由</td>
+                <td>维修原因</td>
+                <td>  地址  </td>
+                <td>详细地址</td>
+                <td>申请日期</td>
+            </tr>
+        </thead>
+        <tbody v-for="i in emps">
+            <tr>
+                <td>{{i.ordernumber}}</td>
+                <td>{{i.type}}</td>
+                <td>{{i.marque}}</td>
+                <td>{{i.degree}}</td>
+                <td>{{i.cause}}</td>
+                <td>{{i.reason}}</td>
+                <td>{{i.address}}</td>
+                <td>{{i.detailedAddress}}</td>
+                <td>{{i.date}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <tr>
+            <td><input id="Button1" class="btn btn-group" type="button" value="首页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" value="上一页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" value="下一页 " /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" value="尾页" /></td>
+        </tr>
+    </table>
+</div>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                emps: ''
+
+            },
+            mounted() {
+                this.Show();
+                
+            },
+            methods: {
+                Show: function () {
+                    var t = this;
+
+                    axios
+                        .get('http://localhost:65300/api/UserGetURD', {
+                            params: {
+                                UId:12
+                            }
+                        })
+                        .then(function (i) {
+                            for (var j = 0; j < i.data.zongtiaoshu-1; j++) {
+                                if (i.data.masd[j].degree==1) {
+                                    i.data.masd[j].degree = "日常";
+                                }
+                                else if (i.data.masd[j].degree == 2) {
+                                    i.data.masd[j].degree = "应急";
+                                }
+                                else {
+                                    i.data.masd[j].degree = "紧急";
+                                }
+                            }
+                            t.emps = i.data.masd;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            }
+        })
+
+    </script>
+}
