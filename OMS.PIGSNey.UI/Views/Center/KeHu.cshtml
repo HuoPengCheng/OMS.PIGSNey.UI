@@ -22,7 +22,9 @@
                 <td>账号</td>
                 <td>手机号</td>
                 <td>类型</td>
+                <td>型号</td>
                 <td>理由</td>
+                <td>状态</td>
                 <td>操作</td>
             </tr>
         </thead>
@@ -32,9 +34,13 @@
                 <td>{{item.uAccount}}</td>
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
+                <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /></td>
-                <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
+                <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
+                <td>
+                    <input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" />
+                    <input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" />
+                </td>
             </tr>
         </tbody>
     </table>
