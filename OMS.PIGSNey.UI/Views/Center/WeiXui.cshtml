@@ -1,12 +1,10 @@
 ﻿
 @{
-    ViewData["Title"] = "KeHu";
+    ViewData["Title"] = "WeiXui";
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-
-<h1>KeHu</h1>
-
+<h1>WeiXui</h1>
 <div id="app">
     <table class="table table-bordered">
         <tr>
@@ -36,11 +34,21 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
-                <td>
-                    <input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" />
-                    <input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" />
-                </td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                <td v-if="'{{item.state}}'==2"><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
+
+                @*if({{item.state==1}}==1)
+                    {
+                    <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
+                    }
+                  if({{item.state==2}}==2)
+                    {
+                    <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
+                    }
+                  if({{item.state==3}}==3)
+                    {
+                    <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
+                    }*@
             </tr>
         </tbody>
     </table>
@@ -85,9 +93,9 @@
                     var m = ch.meiyetiaoshu
                     var n = ch.name;
                     axios
-                        .get('http://localhost:65300/api/Center/KeHu', {
+                        .get('http://localhost:65300/api/Center/WeiXui', {
                             params: {
-                                uid: 12,
+                                uid: 9,
                                 name: n,
                                 dangqianye: i,
                                 meiyetiaoshu: m
@@ -95,7 +103,7 @@
                         })
                         .then(function (i) {
                             ch.message = i.data.masd;
-                           ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongyeshu = i.data.zongyeshu;
                             ch.zongtiaoshu = i.data.zongtiaoshu;
                             ch.dangqianye = i.data.dangqianye;
                         }).catch(function (error) {
@@ -128,32 +136,32 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/KDel?id='+id)
+                            .delete('http://localhost:65300/api/Center/WeiXui?id=' + id)
                             .then(function (i) {
                                 hh.del = parseInt(i.data);
-                                if (hh.del > 0) { 
+                                if (hh.del > 0) {
                                     alert('删除成功！！');
-                                    location.href = 'http://localhost:49485/Center/KeHu';
+                                    location.href = 'http://localhost:49485/WeiXui/KeHu';
                                 }
                                 else {
                                     alert('删除失败！！');
                                 }
                             })
                     }
-                    
+
                 },
                 Gai: function (id) {
                     var hs = this;
                     var ids = id;
-                    var ids2 = 12;
+                    var ids2 = 9;
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai2', {
                                 params: {
                                     id: ids2,
-                                    id2:ids
+                                    id2: ids
                                 }
-                                
+
                             })
                             .then(function (i) {
                                 hs.update1 = parseInt(i.data);
@@ -173,7 +181,9 @@
                     }
                 },
 
+
             }
         });
     </script>
 }
+
