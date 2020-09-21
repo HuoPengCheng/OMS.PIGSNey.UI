@@ -37,10 +37,8 @@
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
                 <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
-                <td>
-                    <input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" />
-                    <input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" />
-                </td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /> </td>
+                <td v-if="item.state!=3">等待维修</td>
             </tr>
         </tbody>
     </table>
@@ -71,7 +69,6 @@
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                del: 0,
                 name: "",
 
             },
@@ -130,7 +127,7 @@
                         axios
                             .delete('http://localhost:65300/api/Center/KDel?id='+id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data);
+                                hh.del = parseInt(i.data); 
                                 if (hh.del > 0) { 
                                     alert('删除成功！！');
                                     location.href = 'http://localhost:49485/Center/KeHu';
@@ -142,36 +139,36 @@
                     }
                     
                 },
-                Gai: function (id) {
-                    var hs = this;
-                    var ids = id;
-                    var ids2 = 12;
-                    if (confirm('是否修改！！')) {
-                        axios
-                            .get('http://localhost:65300/api/Center/ZhuangTai2', {
-                                params: {
-                                    id: ids2,
-                                    id2:ids
-                                }
+                //Gai: function (id) {
+                //    var hs = this;
+                //    var ids = id;
+                //    var ids2 = 12;
+                //    if (confirm('是否修改！！')) {
+                //        axios
+                //            .get('http://localhost:65300/api/Center/ZhuangTai2', {
+                //                params: {
+                //                    id: ids2,
+                //                    id2:ids
+                //                }
                                 
-                            })
-                            .then(function (i) {
-                                hs.update1 = parseInt(i.data);
-                                hs.update2 = parseInt(i.data);
-                                if (hs.update1 > 0) {
-                                    if (hs.update2 > 0) {
-                                        alert('修改成功！！');
-                                    }
-                                    else {
-                                        alert('修改失败！！');
-                                    }
-                                }
-                                else {
-                                    alert('修改失败！！');
-                                }
-                            })
-                    }
-                },
+                //            })
+                //            .then(function (i) {
+                //                hs.update1 = parseInt(i.data);
+                //                hs.update2 = parseInt(i.data);
+                //                if (hs.update1 > 0) {
+                //                    if (hs.update2 > 0) {
+                //                        alert('修改成功！！');
+                //                    }
+                //                    else {
+                //                        alert('修改失败！！');
+                //                    }
+                //                }
+                //                else {
+                //                    alert('修改失败！！');
+                //                }
+                //            })
+                //    }
+                //},
 
             }
         });
