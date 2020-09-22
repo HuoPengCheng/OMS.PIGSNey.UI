@@ -11,6 +11,7 @@
             <td>类型</td>
             <td><input id="name" v-model="name" type="text" /></td>
             <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -151,7 +152,7 @@
                     }
 
                 },
-                Gai1: function (id) {
+                Gai: function (id) {
                     var hs = this;
                     var ids = id;
                     var ids2 = 9;
@@ -183,12 +184,12 @@
                 },
                 Gai2: function (id) {
                     var hs = this;
-                    var ids = id;
+                    alert(id);
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai4', {
                                 params: {
-                                    id=ids,
+                                    id: id
                                 }
 
                             })
@@ -199,7 +200,7 @@
                                     if (hs.update2 > 0) {
                                         alert('修改成功！！');
                                     }
-                                    else {
+                                    else { 
                                         alert('修改失败！！');
                                     }
                                 }

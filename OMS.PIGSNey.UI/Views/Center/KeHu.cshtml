@@ -13,6 +13,7 @@
             <td>类型</td>
             <td><input id="name" v-model="name" type="text" /></td>
             <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Pwd" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -36,7 +37,7 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
                 <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /> </td>
                 <td v-if="item.state!=3">等待维修</td>
             </tr>
@@ -169,6 +170,10 @@
                 //            })
                 //    }
                 //},
+
+                Pwd: function () {
+                    location.href = 'http://localhost:49485/Center/Pwd';
+                }
 
             }
         });
