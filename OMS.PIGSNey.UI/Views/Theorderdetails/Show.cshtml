@@ -28,6 +28,7 @@
                 <td>  地址  </td>
                 <td>详细地址</td>
                 <td>申请日期</td>
+                <td>操作</td>
             </tr>
         </thead>
         <tbody v-for="i in emps">
@@ -35,12 +36,13 @@
                 <td>{{i.ordernumber}}</td>
                 <td>{{i.type}}</td>
                 <td>{{i.marque}}</td>
-                <td>{{i.degree}}</td>
+                <td>{{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}</td>
                 <td>{{i.cause}}</td>
                 <td>{{i.reason}}</td>
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -82,27 +84,14 @@
                         .get('http://localhost:65300/api/UserGetURD', {
                             params: {
                                 UId: 12,
-                                Name: t.name,
-                                StrTime: t.st,
-                                EndTime: t.et,
+                                name: t.name,
+                                strTime: t.st,
+                                endTime: t.et,
                                 PageSize: 5,
                                 CurrPage: dqy,
                             }
                         })
                         .then(function (i) {
-                            //alert("123");
-                            //for (var j = 0; j < i.data.zongtiaoshu - 1; j++) {
-                            //    if (i.data.masd[j].degree == "1") {
-                            //        i.data.masd[j].degree = "日常";
-                            //    }
-                            //    else if (i.data.masd[j].degree == "2") {
-                            //        i.data.masd[j].degree = "应急";
-                            //    }
-                            //    else {
-                            //        i.data.masd[j].degree = "紧急";
-                            //    }
-                            //}
-                            //alert(i.data.masd[0].ordernumber);
                             t.emps = i.data.masd;
                             t.zongyeshu = i.data.zongyeshu;
                             t.zongtiaoshu = i.data.zongtiaoshu;
@@ -127,7 +116,7 @@
                 Next: function () {
                     this.dangqianye++;
                     if (this.dangqianye > this.zongyeshu) {
-                        alert("已经是第一页了");
+                        alert("已经是最后一页了");
                         this.dangqianye--;
                     }
                     this.Show();
