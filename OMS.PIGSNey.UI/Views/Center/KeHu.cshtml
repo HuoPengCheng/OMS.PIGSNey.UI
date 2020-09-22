@@ -4,18 +4,21 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-
-<h1>KeHu</h1>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<h1>客户中心</h1>
 
 <div id="app">
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input type="text" v-model="name" id="sname" required lay-verify="required"  autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Pwd" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
-    <table class="table table-bordered">
+    <hr class="layui-bg-green">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>姓名</td>
@@ -36,13 +39,15 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /> </td>
-                <td v-if="item.state!=3">等待维修</td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                <td v-if="item.state==1">等待通过</td>
+                <td v-if="item.state==2">等待维修</td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)"  class="layui-btn layui-btn-sm" /> </td>
+                <td v-if="item.state==4">不可查看</td>             
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <colgroup>
             <col width="150">
             <col width="200">
@@ -92,7 +97,7 @@
                         })
                         .then(function (i) {
                             ch.message = i.data.masd;
-                           ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongyeshu = i.data.zongyeshu;
                             ch.zongtiaoshu = i.data.zongtiaoshu;
                             ch.dangqianye = i.data.dangqianye;
                         }).catch(function (error) {
@@ -125,10 +130,10 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/KDel?id='+id)
+                            .delete('http://localhost:65300/api/Center/KDel?id=' + id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data); 
-                                if (hh.del > 0) { 
+                                hh.del = parseInt(i.data);
+                                if (hh.del > 0) {
                                     alert('删除成功！！');
                                     location.href = 'http://localhost:49485/Center/KeHu';
                                 }
@@ -137,7 +142,7 @@
                                 }
                             })
                     }
-                    
+
                 },
                 //Gai: function (id) {
                 //    var hs = this;
@@ -150,7 +155,7 @@
                 //                    id: ids2,
                 //                    id2:ids
                 //                }
-                                
+
                 //            })
                 //            .then(function (i) {
                 //                hs.update1 = parseInt(i.data);
@@ -169,6 +174,10 @@
                 //            })
                 //    }
                 //},
+
+                Pwd: function () {
+                    location.href = 'http://localhost:49485/Center/Pwd';
+                }
 
             }
         });

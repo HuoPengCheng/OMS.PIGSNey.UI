@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "ChaoJiGuanLiYuan";
+}
+
+<h1>超级管理员中心</h1>
+<div id="app">
+    <table>
+        <thead>
+            <tr>
+                <td>用户名称</td>
+                <td>用户账号</td>
+                <td>用户密码</td>
+                <td>用户手机号</td>
+                <td>用户状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.uName}}</td>
+                <td>{{item.uAccount}}</td>
+                <td>{{item.uPwd}}</td>
+                <td>{{item.uPhone}}</td>
+                <td>{{item.uState}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+@section scripts{ 
+<script>
+    var app = new Var({
+        el: "#app",
+        data: {
+            massage:"",
+        },
+        mounted() {
+            this.Show();
+        },
+        methods: {
+            Show: function () {
+                axios
+                    .get('http://localhost:65300/api/Center/ChaoJi')
+                    .then(function () {
+
+                    })
+
+            }
+        }
+    })
+</script>
+}
+
