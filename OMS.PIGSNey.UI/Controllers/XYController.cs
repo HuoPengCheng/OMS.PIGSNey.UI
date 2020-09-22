@@ -12,5 +12,15 @@ namespace OMS.PIGSNey.UI.Controllers
         {
             return View();
         }
+
+        public IActionResult ToolShow()
+        {
+            return View();
+        }
+
+        public IActionResult AddMaterial()
+        {
+            return View();
+        }
     }
 }
