@@ -6,24 +6,24 @@
 <script src="~/js/axios.js"></script>
 <link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
 <link href="~/static/admin/css/admin.css" rel="stylesheet" />
-<h1>Pwd</h1>
+<h1>个人中心</h1>
 <div id="app">
     <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>请输入旧密码：</td>
-            <td><input id="Text1" v-model="jpwd" type="password" class="layui-btn layui-btn-sm" /></td>
+            <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="请输入旧密码" autocomplete="off" class="layui-input" style="width:200px"></td>
         </tr>
         <tr>
             <td>请输入新密码：</td>
-            <td><input id="Text1" v-model="xpwd1" type="password" class="layui-btn layui-btn-sm" /></td>
+            <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input" style="width:200px"></td>
         </tr>
         <tr>
             <td>再次输入新密码：</td>
-            <td><input id="Text1" v-model="xpwd2" type="password" class="layui-btn layui-btn-sm" /></td>
+            <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="再次输入新密码" autocomplete="off" class="layui-input" style="width:200px"></td>
         </tr>
         <tr>
-            <td><input id="Button1" type="button" value="取消" /></td>
-            <td><input id="Button1" type="button" value="修改" v-on:click="Pwd" /></td>
+            <td><input id="Button1" type="button" value="取消" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="修改" v-on:click="Pwd" class="layui-btn layui-btn-sm"/></td>
         </tr>
     </table>
 </div>

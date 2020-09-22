@@ -4,14 +4,16 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <h1>WeiXui</h1>
 <div id="app">
     <table class="table table-bordered">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
-            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show" /></td>
+            <td><input type="password" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show"class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show"class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -36,21 +38,10 @@
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
                 <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" /></td>
-                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" /></td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" 	class="layui-btn layui-btn-normal layui-btn-sm"/></td>
+                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)"class="layui-btn layui-btn-warm" /></td>
 
-                @*if({{item.state==1}}==1)
-          {
-          <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==2}}==2)
-          {
-          <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==3}}==3)
-          {
-          <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
-          }*@
+               
             </tr>
         </tbody>
     </table>
@@ -200,7 +191,7 @@
                                     if (hs.update2 > 0) {
                                         alert('修改成功！！');
                                     }
-                                    else { 
+                                    else {
                                         alert('修改失败！！');
                                     }
                                 }
