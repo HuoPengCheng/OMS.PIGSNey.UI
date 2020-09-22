@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Pwd";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<h1>Pwd</h1>
+<div id="app">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <tr>
+            <td>请输入旧密码：</td>
+            <td><input id="Text1" v-model="jpwd" type="password" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+        <tr>
+            <td>请输入新密码：</td>
+            <td><input id="Text1" v-model="xpwd1" type="password" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+        <tr>
+            <td>再次输入新密码：</td>
+            <td><input id="Text1" v-model="xpwd2" type="password" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+        <tr>
+            <td><input id="Button1" type="button" value="取消" /></td>
+            <td><input id="Button1" type="button" value="修改" v-on:click="Pwd" /></td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+
+            },
+            mounted() {
+
+            },
+            methods: {
+                Pwd: function () {
+                    var ch = this;
+                    var p1 = ch.jpwd;
+                    var p2 = ch.xpwd1;
+                    var p3 = ch.xpwd2;
+                    if (p2 == p3) {
+                        axios
+                            .get('http://localhost:65300/api/Center/KeHuPwd', {
+                                params: {
+                                    id: 12,
+                                    jpwd: p1,
+                                    xpwd: p2,
+                                }
+                            })
+                            .then(function (i) {
+                                ch.update = parseInt(i.data);
+                                if (ch.update > 0) {
+                                    alert('修改成功！！！');
+                                    location.href = '//';
+                                }
+                                else {
+                                    alert('修改失败,旧密码错误！！！');
+                                }
+                            })
+                    }
+                    else {
+                        alert('俩次密码输入的不一样，请从新输入！！');
+                    }
+                }
+            }
+        })
+
+
+    </script>
+}
+

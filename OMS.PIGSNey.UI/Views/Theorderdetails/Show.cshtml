@@ -8,12 +8,12 @@
     <table class="table table-bordered">
         <tr>
             <td>开始日期</td>
-            <td><input id="Text1" type="date"  class="form-control"/></td>
+            <td><input id="Text1" type="date" v-model="st" class="form-control" /></td>
             <td>-</td>
             <td>结束日期</td>
-            <td><input id="Text1" type="date" class="form-control" /></td>
-            <td><input id="Text1" type="text" placeholder="根据商品订单查询" /></td>
-            <td><input id="Button1" type="button" value="查询" /></td>
+            <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
+            <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
+            <td><input id="Button1" type="button" value="查询" v-on:click="Show"/></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -28,6 +28,7 @@
                 <td>  地址  </td>
                 <td>详细地址</td>
                 <td>申请日期</td>
+                <td>操作</td>
             </tr>
         </thead>
         <tbody v-for="i in emps">
@@ -35,21 +36,25 @@
                 <td>{{i.ordernumber}}</td>
                 <td>{{i.type}}</td>
                 <td>{{i.marque}}</td>
-                <td>{{i.degree}}</td>
+                <td>{{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}</td>
                 <td>{{i.cause}}</td>
                 <td>{{i.reason}}</td>
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
     <table class="table table-bordered">
         <tr>
-            <td><input id="Button1" class="btn btn-group" type="button" value="首页" /></td>
-            <td><input id="Button1" class="btn btn-group" type="button" value="上一页" /></td>
-            <td><input id="Button1" class="btn btn-group" type="button" value="下一页 " /></td>
-            <td><input id="Button1" class="btn btn-group" type="button" value="尾页" /></td>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="First" value="首页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Prv" value="上一页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Next" value="下一页 " /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Last" value="尾页" /></td>
         </tr>
     </table>
 </div>
@@ -60,40 +65,67 @@
         var app = new Vue({
             el: '#app',
             data: {
-                emps: ''
-
+                emps: '',
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+                name: "",
+                st: "",
+                et: "",
             },
             mounted() {
                 this.Show();
-                
             },
             methods: {
                 Show: function () {
                     var t = this;
-
+                    var dqy = this.dangqianye;
                     axios
                         .get('http://localhost:65300/api/UserGetURD', {
                             params: {
-                                UId:12
+                                UId: 12,
+                                name: t.name,
+                                strTime: t.st,
+                                endTime: t.et,
+                                PageSize: 5,
+                                CurrPage: dqy,
                             }
                         })
                         .then(function (i) {
-                            for (var j = 0; j < i.data.zongtiaoshu-1; j++) {
-                                if (i.data.masd[j].degree==1) {
-                                    i.data.masd[j].degree = "日常";
-                                }
-                                else if (i.data.masd[j].degree == 2) {
-                                    i.data.masd[j].degree = "应急";
-                                }
-                                else {
-                                    i.data.masd[j].degree = "紧急";
-                                }
-                            }
                             t.emps = i.data.masd;
+                            t.zongyeshu = i.data.zongyeshu;
+                            t.zongtiaoshu = i.data.zongtiaoshu;
+                            t.dangqianye = i.data.dangqianye;
+                            
                         }).catch(function (error) {
                             console.log(error);
                         });
-                }
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye<1) {
+                        alert("已经是第一页了");
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        alert("已经是最后一页了");
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                        
             }
         })
 

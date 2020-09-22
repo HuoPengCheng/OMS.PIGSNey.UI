@@ -13,6 +13,7 @@
             <td>类型</td>
             <td><input id="name" v-model="name" type="text" /></td>
             <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Pwd" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -22,18 +23,23 @@
                 <td>账号</td>
                 <td>手机号</td>
                 <td>类型</td>
+                <td>型号</td>
                 <td>理由</td>
+                <td>状态</td>
                 <td>操作</td>
             </tr>
         </thead>
         <tbody v-for="item in message">
-            <tr >
+            <tr>
                 <td>{{item.uName}}</td>
                 <td>{{item.uAccount}}</td>
                 <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
+                <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td><input id="Button1" type="button" value="删除" v-on:click="Del(item.Urdid)" /></td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /> </td>
+                <td v-if="item.state!=3">等待维修</td>
             </tr>
         </tbody>
     </table>
@@ -64,7 +70,8 @@
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                del:0
+                name: "",
+
             },
             mounted() {
                 this.Show();
@@ -117,14 +124,14 @@
                 },
                 Del: function (id) {
                     var hh = this;
-                    if (confirm('确定要删除？')) {
+                    if (confirm('确认删除？')) {
                         axios
                             .delete('http://localhost:65300/api/Center/KDel?id='+id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data.masd);
-                                if (parseInt(i.data.masd) > 0) {
+                                hh.del = parseInt(i.data); 
+                                if (hh.del > 0) { 
                                     alert('删除成功！！');
-                                    this.Show();
+                                    location.href = 'http://localhost:49485/Center/KeHu';
                                 }
                                 else {
                                     alert('删除失败！！');
@@ -132,6 +139,40 @@
                             })
                     }
                     
+                },
+                //Gai: function (id) {
+                //    var hs = this;
+                //    var ids = id;
+                //    var ids2 = 12;
+                //    if (confirm('是否修改！！')) {
+                //        axios
+                //            .get('http://localhost:65300/api/Center/ZhuangTai2', {
+                //                params: {
+                //                    id: ids2,
+                //                    id2:ids
+                //                }
+                                
+                //            })
+                //            .then(function (i) {
+                //                hs.update1 = parseInt(i.data);
+                //                hs.update2 = parseInt(i.data);
+                //                if (hs.update1 > 0) {
+                //                    if (hs.update2 > 0) {
+                //                        alert('修改成功！！');
+                //                    }
+                //                    else {
+                //                        alert('修改失败！！');
+                //                    }
+                //                }
+                //                else {
+                //                    alert('修改失败！！');
+                //                }
+                //            })
+                //    }
+                //},
+
+                Pwd: function () {
+                    location.href = 'http://localhost:49485/Center/Pwd';
                 }
 
             }

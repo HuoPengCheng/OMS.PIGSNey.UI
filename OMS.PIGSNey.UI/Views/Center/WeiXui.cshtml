@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewData["Title"] = "WeiXui";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<h1>WeiXui</h1>
+<div id="app">
+    <table class="table table-bordered">
+        <tr>
+            <td>类型</td>
+            <td><input id="name" v-model="name" type="text" /></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show" /></td>
+        </tr>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>账号</td>
+                <td>手机号</td>
+                <td>类型</td>
+                <td>型号</td>
+                <td>理由</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.uName}}</td>
+                <td>{{item.uAccount}}</td>
+                <td>{{item.uPhone}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.marque}}</td>
+                <td>{{item.reason}}</td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" /></td>
+                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" /></td>
+
+                @*if({{item.state==1}}==1)
+          {
+          <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
+          }
+        if({{item.state==2}}==2)
+          {
+          <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
+          }
+        if({{item.state==3}}==3)
+          {
+          <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
+          }*@
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "",
+                meiyetiaoshu: 2,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+                del: 0,
+                name: "",
+
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                    var ch = this;
+                    var i = ch.dangqianye;
+                    var m = ch.meiyetiaoshu
+                    var n = ch.name;
+                    axios
+                        .get('http://localhost:65300/api/Center/WeiXui', {
+                            params: {
+                                uid: 9,
+                                name: n,
+                                dangqianye: i,
+                                meiyetiaoshu: m
+                            }
+                        })
+                        .then(function (i) {
+                            ch.message = i.data.masd;
+                            ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongtiaoshu = i.data.zongtiaoshu;
+                            ch.dangqianye = i.data.dangqianye;
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                Del: function (id) {
+                    var hh = this;
+                    if (confirm('确认删除？')) {
+                        axios
+                            .delete('http://localhost:65300/api/Center/WeiXui?id=' + id)
+                            .then(function (i) {
+                                hh.del = parseInt(i.data);
+                                if (hh.del > 0) {
+                                    alert('删除成功！！');
+                                    location.href = 'http://localhost:49485/WeiXui/KeHu';
+                                }
+                                else {
+                                    alert('删除失败！！');
+                                }
+                            })
+                    }
+
+                },
+                Gai: function (id) {
+                    var hs = this;
+                    var ids = id;
+                    var ids2 = 9;
+                    if (confirm('是否修改！！')) {
+                        axios
+                            .get('http://localhost:65300/api/Center/ZhuangTai2', {
+                                params: {
+                                    id: ids2,
+                                    id2: ids
+                                }
+
+                            })
+                            .then(function (i) {
+                                hs.update1 = parseInt(i.data);
+                                hs.update2 = parseInt(i.data);
+                                if (hs.update1 > 0) {
+                                    if (hs.update2 > 0) {
+                                        alert('修改成功！！');
+                                    }
+                                    else {
+                                        alert('修改失败！！');
+                                    }
+                                }
+                                else {
+                                    alert('修改失败！！');
+                                }
+                            })
+                    }
+                },
+                Gai2: function (id) {
+                    var hs = this;
+                    alert(id);
+                    if (confirm('是否修改！！')) {
+                        axios
+                            .get('http://localhost:65300/api/Center/ZhuangTai4', {
+                                params: {
+                                    id: id
+                                }
+
+                            })
+                            .then(function (i) {
+                                hs.update1 = parseInt(i.data);
+                                hs.update2 = parseInt(i.data);
+                                if (hs.update1 > 0) {
+                                    if (hs.update2 > 0) {
+                                        alert('修改成功！！');
+                                    }
+                                    else { 
+                                        alert('修改失败！！');
+                                    }
+                                }
+                                else {
+                                    alert('修改失败！！');
+                                }
+                            })
+                    }
+                }
+
+            }
+        });
+    </script>
+}
+
