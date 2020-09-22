@@ -2,10 +2,13 @@
 @{
     ViewData["Title"] = "ChaoJiGuanLiYuan";
 }
-
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <h1>超级管理员中心</h1>
 <div id="app">
-    <table>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>用户名称</td>
@@ -22,32 +25,89 @@
                 <td>{{item.uAccount}}</td>
                 <td>{{item.uPwd}}</td>
                 <td>{{item.uPhone}}</td>
-                <td>{{item.uState}}</td>
+                <td>{{item.uState==1?"正常":"冻结"}}</td>
+                <td v-if="item.uState==1"><input id="Button1" type="button" value="冻结" class="layui-btn layui-btn-normal " /></td>
+                <td v-if="item.uState==0"><input id="Button1" type="button" value="解除" class="layui-btn layui-btn-warm" /></td>
             </tr>
         </tbody>
     </table>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
 </div>
-@section scripts{ 
-<script>
-    var app = new Var({
-        el: "#app",
-        data: {
-            massage:"",
-        },
-        mounted() {
-            this.Show();
-        },
-        methods: {
-            Show: function () {
-                axios
-                    .get('http://localhost:65300/api/Center/ChaoJi')
-                    .then(function () {
+@section scripts{
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data: {
+                message: "",
+                meiyetiaoshu: 5,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                    var ch = this;
+                    var i = ch.dangqianye;
+                    var m = ch.meiyetiaoshu;
+                    axios
+                        .get('http://localhost:65300/api/Center/ChaoJi', {
+                            params: {
+                                dangqianye:i,
+                                meiyetiaoshu:m
+                            }
+                        })
+                        .then(function (i) {
+                            ch.message = i.data.masd;
+                            ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongtiaoshu = i.data.zongtiaoshu;
+                            ch.dangqianye = i.data.dangqianye;
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
 
-                    })
-
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
             }
-        }
-    })
-</script>
+        })
+    </script>
 }
 

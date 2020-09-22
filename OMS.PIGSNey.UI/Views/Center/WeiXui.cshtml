@@ -38,7 +38,7 @@
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
                 <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" 	class="layui-btn layui-btn-normal layui-btn-sm"/></td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" 	class="layui-btn layui-btn-normal "/></td>
                 <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)"class="layui-btn layui-btn-warm" /></td>
 
                
