@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewData["Title"] = "Show";
+}
+
+<h1>Show</h1>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
+
+<div id="app">
+    <script>
+        
+    </script>
+    <h2>当前登录人:{{Uname}}</h2>
+    <table class="table table-bordered">
+        <tr>
+            <td>用户名</td>
+            <td><input id="name" v-model="name" type="text" /></td>
+            <td>账号</td>
+            <td><input id="name" v-model="sjh" type="text" /></td>
+            <td>手机号</td>
+            <td><input id="name" v-model="zh" type="text" /></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+        </tr>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    姓名
+                </th>
+                <th>
+                    角色
+                </th>
+                <th>
+                    账号
+                </th>
+                <th>
+                    密码
+                </th>
+                <th>
+                    手机号
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody v-for="i in message">
+            <tr>
+                <td>{{i.uName}}</td>
+                <td>{{i.rName}}</td>
+                <td>{{i.uAccount}}</td>
+                <td>{{i.uPwd}}</td>
+                <td>{{i.uPhone}}</td>
+                <td>{{i.uState==1?"正常":"冻结"}}</td>
+                <td v-if="i.uState==1"><input id="Button1" v-on:click="dong(i.uId)" type="button" value="冻结" /></td>
+                <td v-if="i.uState==2"><input id="Button1" v-on:click="qi(i.uId)" type="button" value="启用" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="shouye" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="shang" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="xia" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="wei" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                Uname: sessionStorage.getItem("UName"),
+                message: "",
+                meiyetiaoshu: 2,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+                name: "",
+                sjh: "",
+                zh: "",
+            },
+            mounted() { this.Show(), alert(sessionStorage.getItem("UName")); },
+            methods: {
+                Show: function () {
+                    var ch = this;
+                    
+                    axios
+                        .get("http://localhost:65300/api/PageUserShow", {
+                            params: {
+                                CurrPage: ch.dangqianye,
+                                Name: ch.name,
+                                sjh: ch.sjh,
+                                zh: ch.zh,
+                                
+                            }
+
+                        })
+                        .then(function (i) {
+                            ch.message = i.data.masd;
+                            ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongtiaoshu = i.data.zongtiaoshu;
+                            ch.dangqianye = i.data.dangqianye;
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
+
+
+                },
+                shouye: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                shang: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                xia: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                wei: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                dong: function (id) {
+                    var h = this;
+                    if (confirm("确认要冻结嘛")) {
+                        axios.delete("http://localhost:65300/api/gai?id=" + id)
+                            .then(function (i) {
+                                h.del = parseInt(i.data);
+                                if (h.del > 0) {
+                                    alert("冻结成功");
+                                    h.Show();
+                                }
+                                else {
+                                    alert("冻结失败");
+                                    h.Show();
+                                }
+                            })
+                    }
+                    
+                          
+
+                 
+                },
+                qi: function (id) {
+                    var h = this;
+                    if (confirm("确认要启用嘛")) {
+                        axios.delete("http://localhost:65300/api/gai?id=" + id)
+                            .then(function (i) {
+                                h.del = parseInt(i.data);
+                                if (h.del > 0) {
+                                    alert("启用成功");
+                                    h.Show();
+                                }
+                                else {
+                                    alert("启用失败");
+                                    h.Show();
+                                }
+                            })
+                    }
+                },
+
+            }
+        })
+
+
+
+    </script>
+}

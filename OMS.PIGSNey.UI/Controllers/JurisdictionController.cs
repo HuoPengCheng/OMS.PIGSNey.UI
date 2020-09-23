@@ -8,9 +8,16 @@ namespace OMS.PIGSNey.UI.Controllers
 {
     public class JurisdictionController : Controller
     {
+      
         public IActionResult Index()
         {
             return View();
         }
+        public IActionResult Show()
+        {
+            return View();
+        }
+    
+
     }
 }
