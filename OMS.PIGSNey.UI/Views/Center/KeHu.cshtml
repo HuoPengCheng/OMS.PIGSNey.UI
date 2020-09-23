@@ -7,12 +7,45 @@
 <link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
 <link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <h1>客户中心</h1>
-
+<link href="~/css/verification code.css" rel="stylesheet" />
 <div id="app">
+    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            <tton>
+                                <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai(1)">
+                            完成<tton>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消<tton>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>类型</td>
-            <td><input type="text" v-model="name" id="sname" required lay-verify="required"  autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input type="text" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
             <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
             <td><input id="Button1" type="button" value="修改密码" v-on:click="Pwd" class="layui-btn layui-btn-sm" /></td>
         </tr>
@@ -42,8 +75,8 @@
                 <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
                 <td v-if="item.state==1">等待通过</td>
                 <td v-if="item.state==2">等待维修</td>
-                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)"  class="layui-btn layui-btn-sm" /> </td>
-                <td v-if="item.state==4">不可查看</td>             
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-sm" /> </td>
+                <td v-if="item.state==4">不可查看</td>
             </tr>
         </tbody>
     </table>
@@ -63,6 +96,16 @@
             <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
+    <div class="code">
+        用户名:<input type="text" class="input-val" />
+        <br />
+        密&nbsp;&nbsp;&nbsp;码:<input type="password" class="input-val" />
+        <br />
+        验证码:<input type="text" value="" placeholder="请输入验证码（不区分大小写）" id="yzcode" class="input-val">
+        <canvas id="canvas" width="100" height="30"></canvas>
+        <button class="btn">提交</button>
+
+    </div>
 </div>
 @section scripts{
     <script>
@@ -75,6 +118,8 @@
                 zongyeshu: 1,
                 zongtiaoshu: 1,
                 name: "",
+                uname: "",
+                phone: ""
 
             },
             mounted() {
@@ -177,9 +222,44 @@
 
                 Pwd: function () {
                     location.href = 'http://localhost:49485/Center/Pwd';
+                },
+                Fan: function (id) {
+                    var h = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/Fan?id=' + id)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                            $("#sname1").val(h.uname);
+                            $("#sname2").val(h.phone);
+                        })
+                },
+                XuiGai: function (id) {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    axios
+                        .get('http://localhost:65300/api/Center/ZL',
+                            {
+                                params: {
+                                    id: id,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
                 }
 
             }
         });
+        
     </script>
 }
