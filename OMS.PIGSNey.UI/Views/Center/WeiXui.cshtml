@@ -4,13 +4,50 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <h1>WeiXui</h1>
 <div id="app">
+    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai(1)">
+                            完成
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <table class="table table-bordered">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input type="password" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -35,21 +72,10 @@
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
                 <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" /></td>
-                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" /></td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" class="layui-btn layui-btn-normal " /></td>
+                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" class="layui-btn layui-btn-warm" /></td>
 
-                @*if({{item.state==1}}==1)
-          {
-          <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==2}}==2)
-          {
-          <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==3}}==3)
-          {
-          <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
-          }*@
+
             </tr>
         </tbody>
     </table>
@@ -151,7 +177,7 @@
                     }
 
                 },
-                Gai1: function (id) {
+                Gai: function (id) {
                     var hs = this;
                     var ids = id;
                     var ids2 = 9;
@@ -183,12 +209,12 @@
                 },
                 Gai2: function (id) {
                     var hs = this;
-                    var ids = id;
+                    alert(id);
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai4', {
                                 params: {
-                                    id=ids,
+                                    id: id
                                 }
 
                             })
@@ -208,6 +234,40 @@
                                 }
                             })
                     }
+                },
+                Fan: function (id) {
+                    var h = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/Fan?id=' + id)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                            $("#sname1").val(h.uname);
+                            $("#sname2").val(h.phone);
+                        })
+                },
+                XuiGai: function (id) {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    axios
+                        .get('http://localhost:65300/api/Center/ZL',
+                            {
+                                params: {
+                                    id: id,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
                 }
 
             }

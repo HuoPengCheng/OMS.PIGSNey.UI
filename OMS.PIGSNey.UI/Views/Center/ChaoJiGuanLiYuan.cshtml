@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewData["Title"] = "ChaoJiGuanLiYuan";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<h1>超级管理员中心</h1>
+<div id="app">
+    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai(1)">
+                            完成
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <thead>
+            <tr>
+                <td>用户名称</td>
+                <td>用户账号</td>
+                <td>用户密码</td>
+                <td>用户手机号</td>
+                <td>用户状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.uName}}</td>
+                <td>{{item.uAccount}}</td>
+                <td>{{item.uPwd}}</td>
+                <td>{{item.uPhone}}</td>
+                <td>{{item.uState==1?"正常":"冻结"}}</td>
+                <td v-if="item.uState==1"><input id="Button1" type="button" value="冻结" class="layui-btn layui-btn-normal " /></td>
+                <td v-if="item.uState==0"><input id="Button1" type="button" value="解除" class="layui-btn layui-btn-warm" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data: {
+                message: "",
+                meiyetiaoshu: 5,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                    var ch = this;
+                    var i = ch.dangqianye;
+                    var m = ch.meiyetiaoshu;
+                    axios
+                        .get('http://localhost:65300/api/Center/ChaoJi', {
+                            params: {
+                                dangqianye:i,
+                                meiyetiaoshu:m
+                            }
+                        })
+                        .then(function (i) {
+                            ch.message = i.data.masd;
+                            ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongtiaoshu = i.data.zongtiaoshu;
+                            ch.dangqianye = i.data.dangqianye;
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
+
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                Fan: function (id) {
+                    var h = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/Fan?id=' + id)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                            $("#sname1").val(h.uname);
+                            $("#sname2").val(h.phone);
+                        })
+                },
+                XuiGai: function (id) {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    axios
+                        .get('http://localhost:65300/api/Center/ZL',
+                            {
+                                params: {
+                                    id: id,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
+                }
+            }
+        })
+    </script>
+}
+
