@@ -7,14 +7,16 @@
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
 <div id="app">
     材料名称：<input v-model="txt_MaterialName" type="text" />
     材料类别：<select id="Category" onselect="hha" v-model="hha">
         <option v-for="(item,index) in OPtions" v-bind:value="item.cId">{{item.cName}}</option>
     </select>
-    <button v-on:click="Show()">查询</button>
-
-    <table class="table">
+    <button v-on:click="Show()" class="layui-btn layui-btn-sm">查询</button>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>材料名称</td>
@@ -36,22 +38,29 @@
                     <img v-bind:src="item.mImg" class="img-box4" width="50" height="50">
                 </td>
                 <td>
-                    <input id="Button1" type="button" value="采购" data-toggle="modal" data-target="#Cai" v-on:click="AddMaterial(item.maId)" />
-                    <input id="Button1" type="button" value="使用明细" data-toggle="modal" data-target="#UseMaterial" v-on:click="Use(item.maId)" />
+                    <input id="Button1" class="layui-btn layui-btn-sm" type="button" value="采购" data-toggle="modal" data-target="#Cai" v-on:click="AddMaterial(item.maId)" />
+                    <input id="Button1" class="layui-btn layui-btn-sm" type="button" value="使用明细" data-toggle="modal" data-target="#UseMaterial" v-on:click="Use(item.maId)" />
                 </td>
             </tr>
         </tbody>
     </table>
+
     @*<span>{{hha}}</span>*@
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <colgroup>
+
+            <col width="200">
+            <col width="150">
+            <col>
+        </colgroup>
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
             <td>当前是第<span>{{dangqianye}}</span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="First" /></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" /></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" /></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" /></td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
 
@@ -97,13 +106,13 @@
          style="position: absolute;top: 0;left: 0">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="width: 702px;">
-                <form action="." method="post" class="form-horizontal" >
+                <form action="." method="post" class="form-horizontal">
                     <div class="modal-header">
                         <h4 class="modal-title">使用明细</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        
+
                     </div>
                     <div class="modal-body">
                         <table class="table">
@@ -118,7 +127,7 @@
                                     <td>领取时间</td>
                                 </tr>
                             </thead>
-                            <tbody  v-for="item in mes">
+                            <tbody v-for="item in mes">
                                 <tr>
                                     <td>{{item.materialName}}</td>
                                     <td>{{item.uName}}</td>
@@ -130,10 +139,10 @@
                                 </tr>
                             </tbody>
                         </table>
-                       
+
                     </div>
                     <div class="modal-footer">
-                       
+
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     </div>
                 </form>
@@ -145,13 +154,13 @@
 
 @section scripts{
     <script>
-      var vue =  new Vue(
+        var vue = new Vue(
             {
-              el: "#app",
-              
-              data: {
-                    txt_MaterialName:"",
-                    OPtions:[],
+                el: "#app",
+
+                data: {
+                    txt_MaterialName: "",
+                    OPtions: [],
                     message: "",
                     zongyeshu: 1,
                     dangqianye: 1,
@@ -162,8 +171,8 @@
                     mSpecification: "",
                     MAmount: 0,
                     MAId: 0,
-                    mes:"",
-                   
+                    mes: "",
+
                 },
                 mounted() {
                     this.Show();
@@ -174,12 +183,12 @@
                         var t = this;
                         var i = t.dangqianye;
                         var n = t.hha;
-                        
+
                         axios
                             .get('http://localhost:65300/api/XY/MaterialShow', {
                                 params: {
-                                    MaterialName:t.txt_MaterialName,
-                                    CId:n,
+                                    MaterialName: t.txt_MaterialName,
+                                    CId: n,
                                     pageIndex: i,
                                     pageSize: 2,
 
@@ -231,32 +240,32 @@
                         axios
                             .get("http://localhost:65300/api/XY/GetMAterialById?MAId=" + maId)
                             .then(function (i) {
-                                    t.materialName = i.data[0].materialName,
+                                t.materialName = i.data[0].materialName,
                                     t.mSpecification = i.data[0].mSpecification,
-                                t.MAId = i.data[0].maId
+                                    t.MAId = i.data[0].maId
                             })
                     },
                     caigou: function (maId) {
                         var t = this;
-                        
+
                         var Amount = t.MAmount;
                         axios
                             .get("http://localhost:65300/api/XY/AddMamount", {
                                 params: {
                                     MAId: this.MAId,
-                                     MAmount:Amount,
+                                    MAmount: Amount,
                                 }
                             })
                             .then(function (i) {
                                 t.update = parseInt(i.data);
                                 if (t.update > 0) {
                                     alert("采购成功");
-                                    location.href='/XY/MaterialShow'
+                                    location.href = '/XY/MaterialShow'
                                 }
                                 else {
                                     alert("采购失败");
                                 }
-                               
+
                             })
                     },
                     Use: function (maId) {
@@ -264,7 +273,7 @@
                         axios
                             .get("http://localhost:65300/api/XY/GetUseMaterial?MAId=" + maId)
                             .then(function (i) {
-                                
+
                                 t.mes = i.data;
                             })
                     }
