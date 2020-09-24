@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\TheorderdetailsImg\3256f2b6499dc91.png" />
+    <None Include="wwwroot\TheorderdetailsImg\5905958e66dce_610.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="axios.js" Version="0.18.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
