@@ -33,6 +33,7 @@
         <tr>
             <td>
                 <input id="Button1" type="button" value="登录" v-on:click="Denglu" />
+                <input id="Button1" type="button" value="注册" v-on:click="Zhuce" />
             </td>
         </tr>
     </table>
@@ -40,6 +41,17 @@
 
 @section scripts{
     <script>
+        var jschars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        function generateMixed(9) {
+            var res = "";
+            for (var i = 0; i < 9; i++) {
+                var id = Math.ceil(Math.random() * 35);
+                res += jschars[id];
+            }
+            return res;
+            alert(res);
+        }
+        
         var app = new Vue({
             el: "#app",
             data: {
@@ -52,7 +64,12 @@
                 uPhone:"",
                 uState:"",
             },
-            mounted() { },
+
+            mounted() {
+
+               
+            },
+
             methods: {
                 Denglu: function () {
                     var t = this;
