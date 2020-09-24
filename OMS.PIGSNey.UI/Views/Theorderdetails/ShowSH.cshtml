@@ -1,11 +1,11 @@
 ﻿
 @{
-    ViewData["Title"] = "Show";
+    ViewData["Title"] = "ShowSH";
 }
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-<h1>Show</h1>
+<h1>ShowSH</h1>
 <div id="app">
     <table class="table table-bordered">
         <tr>
@@ -16,9 +16,6 @@
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
             <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
             <td><input id="Button1" type="button" value="查询" v-on:click="Show" /></td>
-            <td>
-                <img src="/TheorderdetailsImg/3256f2b6499dc91.png" data-toggle="modal" data-target="#addClass1" title="查看回访消息" v-on:click="XX()" style="float:right;width:70px;height:60px" alt="" />
-            </td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -33,6 +30,7 @@
                 <td>  地址  </td>
                 <td>详细地址</td>
                 <td>申请日期</td>
+                <td>申请人</td>
                 <td>维修状态</td>
                 <td>操作</td>
             </tr>
@@ -50,9 +48,11 @@
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
-                <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":"已完成"}}</td>
+                @*<td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":"已完成"}}</td>*@
+                <td>{{i.uName}}</td>
+                <td v-if="i.state==0"><input id="Button1" type="button" value="审核" v-on:click="ShenHe(i.urdId,i.uId)" /><input id="Button1" type="button" value="驳回" v-on:click="BoHui(i.urdId,i.uId)"/></td>
+                <td v-if="i.state!=0">{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
                 <td>
-                    <input id="Button1" type="button" class="btn btn-danger" value="取消订单" v-on:click="Del(i.urdId)" />
                     <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" />
                 </td>
             </tr>
@@ -81,6 +81,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+                        <h4 class="modal-title">详情</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -128,31 +129,6 @@
             </div>
         </div>
     </div>
-
-
-    <div class="modal fade" id="addClass1" tabindex="-1" role="dialog" aria-labelledby="XXX"
-         style="position: absolute;top: 0;left: 0">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="." method="post" class="form-horizontal">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">订单编号:</label>
-                            <label for="inputEmail3">{{response}}</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 @section scripts{
     <script>
@@ -160,7 +136,6 @@
             el: '#app',
             data: {
                 emps: '',
-                response: '',
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
@@ -185,7 +160,7 @@
                     var t = this;
                     var dqy = this.dangqianye;
                     axios
-                        .get('http://localhost:65300/api/UserGetURD', {
+                        .get('http://localhost:65300/api/UserGetURDSH', {
                             params: {
                                 UId: 12,
                                 name: t.name,
@@ -205,6 +180,44 @@
                             console.log(error);
                         });
                 },
+                ShenHe: function (id,ids) {
+                    alert(id);
+                    alert(ids);
+                    axios
+                        .get("http://localhost:65300/api/ShenHe", {
+                            params:{
+                                UrdId:id,
+                                UId:ids,
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("审核通过");
+                                t.Show();
+                            }
+                            else {
+                                alert("通过失败");
+                            }
+                        })
+                },
+                BoHui: function (id, ids) {
+                    axios
+                        .get("http://localhost:65300/api/Bohui", {
+                            params: {
+                                UrdId: id,
+                                UId: ids,
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("驳回申请");
+                                t.Show();
+                            }
+                            else {
+                                alert("通过失败");
+                            }
+                        })
+                },
                 XQ: function (id) {
                     var t = this
                     axios
@@ -223,33 +236,6 @@
                         }).catch(function (error) {
                             console.log(error);
                         });
-                },
-                XX: function () {
-                    alert("查看消息");
-                    var t = this
-                    axios
-                        .get("http://localhost:65300/api/GetResponse=" + 12)
-                        .then(function (i) {
-                            t.response = i.data;
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                },
-                Del: function (id) {
-                    var t = this
-                    if (confirm("是否取消订单")) {
-                        axios
-                            .get("http://localhost:65300/api/UserDelURD?UrdId=" + id)
-                            .then(function (i) {
-                                if (i.data > 0) {
-                                    alert("取消成功");
-                                    t.Show();
-                                }
-                                else {
-                                    alert("取消失败");
-                                }
-                            })
-                    }
                 },
                 First: function () {
                     this.dangqianye = 1;
