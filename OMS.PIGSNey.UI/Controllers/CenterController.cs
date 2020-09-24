@@ -24,5 +24,9 @@ namespace OMS.PIGSNey.UI.Controllers
         {
             return View();
         }
+        public IActionResult GuanLi()
+        {
+            return View();
+        }
     }
 }
