@@ -5,6 +5,8 @@
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<script src="~/static/admin/layui/layui.js"></script>
 <h1>Show</h1>
 <div id="app">
     <table class="table table-bordered">
@@ -14,14 +16,16 @@
             <td>-</td>
             <td>结束日期</td>
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
-            <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
-            <td><input id="Button1" type="button" value="查询" v-on:click="Show" /></td>
+            <td><input id="Text1" type="text" v-model="name" lay-verify="required" class="layui-input" placeholder="根据商品订单查询" /></td>
             <td>
-                <img src="/TheorderdetailsImg/3256f2b6499dc91.png" data-toggle="modal" data-target="#addClass1" title="查看回访消息" v-on:click="XX()" style="float:right;width:70px;height:60px" alt="" />
+                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show">查询</button>
+            </td>
+            <td>
+                <img src="/TheorderdetailsImg/QQ图片20200924143148.png" data-toggle="modal" data-target="#UseMaterial" title="查看回访消息" v-on:click="XX()" style="width:42px;height:35px" alt="" />
             </td>
         </tr>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <thead>
             <tr>
                 <td>订单编号</td>
@@ -50,11 +54,10 @@
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
-                <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":"已完成"}}</td>
-                <td>
-                    <input id="Button1" type="button" class="btn btn-danger" value="取消订单" v-on:click="Del(i.urdId)" />
-                    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" />
-                </td>
+                <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
+                <td v-if="i.state==0||i.state==1||i.state==2"><input id="Button1" type="button" class="btn btn-danger" value="取消订单" v-on:click="Del(i.urdId)" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
+                <td v-if="i.state==3"><input id="Button1" type="button" class="btn btn-danger" value="意见回复" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
+                <td v-if="i.state==-1"><input id="Button1" type="button" class="btn btn-danger" value="再次申请" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
             </tr>
         </tbody>
     </table>
@@ -130,29 +133,36 @@
     </div>
 
 
-    <div class="modal fade" id="addClass1" tabindex="-1" role="dialog" aria-labelledby="XXX"
+    <div class="modal fade" id="UseMaterial" tabindex="-1" role="dialog" aria-labelledby="XXX"
          style="position: absolute;top: 0;left: 0">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 702px;">
                 <form action="." method="post" class="form-horizontal">
                     <div class="modal-header">
+                        <h4 class="modal-title">消息</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">订单编号:</label>
-                            <label for="inputEmail3">{{response}}</label>
-                        </div>
+                        <table class="table" v-for="item in response">
+                            <tr>
+                                <td>尊敬的{{item.uName}}用户您好    您的订单{{item.ordernumber}}     于{{item.promptTime}}    返回信息:{{item.promptContent}}</td>
+                            </tr>
+                        </table>
                     </div>
                     <div class="modal-footer">
+
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+
+
+
 </div>
 @section scripts{
     <script>
@@ -228,7 +238,7 @@
                     alert("查看消息");
                     var t = this
                     axios
-                        .get("http://localhost:65300/api/GetResponse=" + 12)
+                        .get("http://localhost:65300/api/GetResponse?UId=" + 12)
                         .then(function (i) {
                             t.response = i.data;
                         }).catch(function (error) {
