@@ -4,18 +4,93 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-
-<h1>KeHu</h1>
-
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<h1>客户中心</h1>
+<link href="~/css/verification code.css" rel="stylesheet" />
 <div id="app">
-    <table class="table table-bordered">
+    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" v-model="uname" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" v-model="phone" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai(1)">
+                            完成
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass1" type="button" value="修改密码" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass1" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>请输入旧密码：</td>
+                                <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="请输入旧密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>请输入新密码：</td>
+                                <td><input type="password" v-model="xpwd1" id="sname" required lay-verify="required" placeholder="请输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>再次输入新密码：</td>
+                                <td><input type="password" v-model="xpwd2" id="sname" required lay-verify="required" placeholder="再次输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Pwd">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input type="text" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="修改密码" v-on:click="Pwd" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
-    <table class="table table-bordered">
+    <hr class="layui-bg-green">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>姓名</td>
@@ -36,13 +111,15 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "在修理": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" /> </td>
-                <td v-if="item.state!=3">等待维修</td>
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                <td v-if="item.state==1">等待通过</td>
+                <td v-if="item.state==2">等待维修</td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-sm" /> </td>
+                <td v-if="item.state==4">不可查看</td>
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <colgroup>
             <col width="150">
             <col width="200">
@@ -58,6 +135,7 @@
             <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
+
 </div>
 @section scripts{
     <script>
@@ -70,6 +148,8 @@
                 zongyeshu: 1,
                 zongtiaoshu: 1,
                 name: "",
+                uname: "",
+                phone: ""
 
             },
             mounted() {
@@ -92,7 +172,7 @@
                         })
                         .then(function (i) {
                             ch.message = i.data.masd;
-                           ch.zongyeshu = i.data.zongyeshu;
+                            ch.zongyeshu = i.data.zongyeshu;
                             ch.zongtiaoshu = i.data.zongtiaoshu;
                             ch.dangqianye = i.data.dangqianye;
                         }).catch(function (error) {
@@ -125,9 +205,9 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/KDel?id='+id)
+                            .delete('http://localhost:65300/api/Center/KDel?id=' + id)
                             .then(function (i) {
-                                hh.del = parseInt(i.data); 
+                                hh.del = parseInt(i.data);
                                 if (hh.del > 0) { 
                                     alert('删除成功！！');
                                     location.href = 'http://localhost:49485/Center/KeHu';
@@ -137,7 +217,7 @@
                                 }
                             })
                     }
-                    
+
                 },
                 //Gai: function (id) {
                 //    var hs = this;
@@ -150,7 +230,7 @@
                 //                    id: ids2,
                 //                    id2:ids
                 //                }
-                                
+
                 //            })
                 //            .then(function (i) {
                 //                hs.update1 = parseInt(i.data);
@@ -170,7 +250,74 @@
                 //    }
                 //},
 
+                Pwd: function () {
+                    location.href = 'http://localhost:49485/Center/Pwd';
+                },
+                Fan: function (id) {
+                    var h = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/Fan?id=' + id)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                        })
+                },
+                XuiGai: function (id) {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    axios
+                        .get('http://localhost:65300/api/Center/ZL',
+                            {
+                                params: {
+                                    id: id,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                                location.href = 'http://localhost:49485/Center/KeHu';
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
+                },
+                Pwd: function () {
+                    var ch = this;
+                    var p1 = ch.jpwd;
+                    var p2 = ch.xpwd1;
+                    var p3 = ch.xpwd2;
+                    if (p2 == p3) {
+                        axios
+                            .get('http://localhost:65300/api/Center/KeHuPwd', {
+                                params: {
+                                    id: 12,
+                                    jpwd: p1,
+                                    xpwd: p2,
+                                }
+                            })
+                            .then(function (i) {
+                                ch.update = parseInt(i.data);
+                                if (ch.update > 0) {
+                                    alert('修改成功！！！');
+                                    location.href = '//';
+                                }
+                                else {
+                                    alert('修改失败,旧密码错误！！！');
+                                }
+                            })
+                    }
+                    else {
+                        alert('俩次密码输入的不一样，请从新输入！！');
+                    }
+                }
+
             }
         });
+        
     </script>
 }

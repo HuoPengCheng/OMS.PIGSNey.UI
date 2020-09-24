@@ -16,6 +16,14 @@ namespace OMS.PIGSNey.UI.Controllers
         {
             return View();
         }
+        public IActionResult ChaoJiGuanLiYuan()
+        {
+            return View();
+        }
+        public IActionResult Pwd()
+        {
+            return View();
+        }
         public IActionResult GuanLi()
         {
             return View();

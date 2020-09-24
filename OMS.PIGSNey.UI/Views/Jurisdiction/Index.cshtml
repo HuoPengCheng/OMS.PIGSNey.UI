@@ -4,61 +4,123 @@
 }
 
 <h1>Index</h1>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
 
-<table>
-    <tr>
-        <td>
-            账号:
-            <input id="Text1" type="text" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            密码:
-            <input id="Password1" type="password" />
-            <input id="Text2" type="text" />
-            <input id="Button2" type="button" value="button" onclick="yzm()" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            验证码:
-            
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <input id="Button1" type="button" value="登录" onclick="Deng()" />
-        </td>
-    </tr>
-</table>
-<script>
-    function yzm() {
-        $.ajax({
-            url: "http://api.feige.ee/SmsService/Template",
-            type: "post",
-            dataType: "json",
-            success: function (d) {
-              
+
+<div id="app">
+    <table>
+        <tr>
+            <td>
+                账号:
+                <input id="Text1" v-model="name" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                密码:
+                <input id="Password1" v-model="mima" type="password" />
+
+            </td>
+        </tr>
+        @*<tr>
+                <td>
+                    验证码:
+                    <input id="Text2" type="text" />
+                    <input id="Button2" type="button" value="button" onclick="yzm()" />
+                </td>
+            </tr>*@
+        <tr>
+            <td>
+                <input id="Button1" type="button" value="登录" v-on:click="Denglu" />
+                <input id="Button1" type="button" value="注册" v-on:click="Zhuce" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        var jschars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        function generateMixed(9) {
+            var res = "";
+            for (var i = 0; i < 9; i++) {
+                var id = Math.ceil(Math.random() * 35);
+                res += jschars[id];
             }
+            return res;
+            alert(res);
+        }
+        
+        var app = new Vue({
+            el: "#app",
+            data: {
+                name: "",
+                mima: "",
+                uId:"",
+                uName:"",
+                uAccount:"",
+                uPwd:"",
+                uPhone:"",
+                uState:"",
+            },
 
-        })
-    }
-    function Deng() {
-        $.ajax({
-            url: "http://localhost:65300/api/Denglu",
-            data: { name: $("#Text1").val(), pass: $("#Password1").val() },
-            type: "get",
-            dataType: "json",
-            success: function (d) {
-                if (d > 0) {
-                    alert("登录成功");
-                }
-                else {
-                    alert("登录失败");
-                }
-            }
+            mounted() {
 
+               
+            },
+
+            methods: {
+                Denglu: function () {
+                    var t = this;
+                    axios.get("http://localhost:65300/api/Denglu", {
+                        params: {
+                            name: t.name,
+                            pass: t.mima,
+                        }
+                    })
+                        .then(function (i) {
+
+                            if (i.data > 0) {
+                                alert("登录成功");
+                                axios.get("http://localhost:65300/api/Session", {
+                                    params: {
+                                        name: t.name,
+                                        pass: t.mima,
+                                    }
+
+                                })
+                                    .then(function (d) {
+                                        t.uId = d.data[0].uId;
+                                        t.uName = d.data[0].uName;
+                                        t.uAccount = d.data[0].uAccount;
+                                        t.uPwd = d.data[0].uPwd;
+                                        t.uPhone = d.data[0].uPhone;
+                                        t.uState = d.data[0].uState;
+                                        sessionStorage.setItem("UId", t.uId);
+                                        sessionStorage.setItem("UName", t.uName);
+                                        sessionStorage.setItem("UAccount", t.uAccount);
+                                        sessionStorage.setItem("UPwd", t.uPwd);
+                                        sessionStorage.setItem("UPhone", t.uPhone);
+                                        sessionStorage.setItem("UState", t.uState);
+                                        alert(sessionStorage.getItem("UAccount"));
+
+                                    })
+                                //alert(sessionStorage.getItem("UName"));
+                                //alert(sessionStorage.getItem("UAccount"));
+                                //alert(sessionStorage.getItem("UPwd"));
+                                ////alert(sessionStorage.getItem("UState"));
+                                location.href = "/Jurisdiction/Show";
+                            }
+                            else {
+                                alert("登录失败");
+                            }
+
+
+                        })
+                }
+
+            },
         })
-    }
-</script>
+    </script>
+}

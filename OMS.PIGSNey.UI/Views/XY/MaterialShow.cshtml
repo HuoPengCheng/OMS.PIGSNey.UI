@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewData["Title"] = "MaterialShow";
+}
+
+<h1>材料显示</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<div id="app">
+    材料名称：<input v-model="txt_MaterialName" type="text" />
+    材料类别：<select id="Category" onselect="hha" v-model="hha">
+        <option v-for="(item,index) in OPtions" v-bind:value="item.cId" >{{item.cName}}</option>
+    </select>
+    <button v-on:click="Show()">查询</button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>材料名称</td>
+                <td>当前剩余量</td>
+                <td>材料类别</td>
+                <td>规格</td>
+                <td>图片</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.materialName}}</td>
+                <td>{{item.mAmount}}</td>
+                <td>{{item.cName}}</td>
+                <td>{{item.mSpecification}}</td>
+                <td>
+                    
+                    <img v-bind:src="item.mImg"  class="img-box4" width="50" height="50">
+                </td>
+                <td>
+                    <input id="Button1" type="button" value="采购" v-on:click="AddMaterial()"/>
+                    <input id="Button1" type="button" value="使用明细" v-on:click="Use()"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @*<span>{{hha}}</span>*@
+    <table class="table">
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" /></td>
+        </tr>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        new Vue(
+            {
+                el: "#app",
+                data: {
+                    txt_MaterialName:"",
+                    OPtions:[],
+                    message: "",
+                    zongyeshu: 1,
+                    dangqianye: 1,
+                    meiyetiaoshu: 2,
+                    zongtiaoshu: 1,
+                    hha:0,
+                },
+                mounted() {
+                    this.Show();
+                    this.Xl();
+                },
+                methods: {
+                    Show: function () {
+                        var t = this;
+                        var i = t.dangqianye;
+                        var n = t.hha;
+                        
+                        axios
+                            .get('http://localhost:65300/api/XY/MaterialShow', {
+                                params: {
+                                    MaterialName:t.txt_MaterialName,
+                                    CId:n,
+                                    pageIndex: i,
+                                    pageSize: 2,
+
+                                }
+                            })
+                            .then(function (i) {
+                                t.zongyeshu = i.data.zongyeshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.meiyetiaoshu = i.data.meiyetiaoshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.zongtiaoshu = i.data.zongtiaoshu;
+                                t.hha = i.data.masd.CId;
+                                t.message = i.data.masd;
+                            })
+
+                    },
+                    First: function () {
+                        this.dangqianye = 1;
+                        this.Show();
+                    },
+                    Prv: function () {
+                        this.dangqianye--;
+                        if (this.dangqianye < 1) {
+                            this.dangqianye++;
+                        }
+                        this.Show();
+                    },
+                    Next: function () {
+                        this.dangqianye++;
+                        if (this.dangqianye > this.zongyeshu) {
+                            this.dangqianye--;
+                        }
+                        this.Show();
+                    },
+                    Last: function () {
+                        this.dangqianye = this.zongyeshu;
+                        this.Show();
+                    },
+                    Xl: function () {
+                        var x = this;
+                        axios
+                            .get('http://localhost:65300/api/XY/GetCategory')
+                            .then(function (i) {
+                                x.OPtions = i.data;
+                            })
+                    },
+                    AddMaterial: function () {
+                        location.href = '/XY/AddMaterial';
+                    }
+                }
+
+            })
+    </script>
+}

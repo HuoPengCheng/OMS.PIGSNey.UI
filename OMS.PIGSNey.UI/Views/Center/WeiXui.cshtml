@@ -4,13 +4,88 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <h1>WeiXui</h1>
 <div id="app">
+    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai(1)">
+                            完成
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass1" type="button" value="修改密码" v-on:click="Fan(1)" />
+    <div class="modal fade" id="addClass1" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>请输入旧密码：</td>
+                                <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="请输入旧密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>请输入新密码：</td>
+                                <td><input type="password" v-model="xpwd1" id="sname" required lay-verify="required" placeholder="请输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>再次输入新密码：</td>
+                                <td><input type="password" v-model="xpwd2" id="sname" required lay-verify="required" placeholder="再次输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Pwd">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <table class="table table-bordered">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
+            <td><input type="password" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+
         </tr>
     </table>
     <table class="table table-bordered">
@@ -34,22 +109,10 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" /></td>
-                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" /></td>
-
-                @*if({{item.state==1}}==1)
-          {
-          <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==2}}==2)
-          {
-          <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==3}}==3)
-          {
-          <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
-          }*@
+                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已完成"}}</td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" class="layui-btn layui-btn-normal " /></td>
+                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" class="layui-btn layui-btn-warm" /></td>
+                <td v-if="item.state==4"><input id="Button1" type="button" value="已完成" class="layui-btn layui-btn-disabled" /></td>
             </tr>
         </tbody>
     </table>
@@ -82,7 +145,6 @@
                 zongtiaoshu: 1,
                 del: 0,
                 name: "",
-
             },
             mounted() {
                 this.Show();
@@ -149,7 +211,6 @@
                                 }
                             })
                     }
-
                 },
                 Gai1: function (id) {
                     var hs = this;
@@ -162,7 +223,6 @@
                                     id: ids2,
                                     id2: ids
                                 }
-
                             })
                             .then(function (i) {
                                 hs.update1 = parseInt(i.data);
@@ -183,14 +243,13 @@
                 },
                 Gai2: function (id) {
                     var hs = this;
-                    var ids = id;
+                    alert(id);
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai4', {
                                 params: {
-                                    id=ids,
+                                    id: id
                                 }
-
                             })
                             .then(function (i) {
                                 hs.update1 = parseInt(i.data);
@@ -208,8 +267,71 @@
                                 }
                             })
                     }
+                },
+                Fan: function (id) {
+                    var h = this;
+                    axios
+                        .get('http://localhost:65300/api/Center/Fan?id=' + id)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                            $("#sname1").val(h.uname);
+                            $("#sname2").val(h.phone);
+                        })
+                },
+                XuiGai: function (id) {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    axios
+                        .get('http://localhost:65300/api/Center/ZL',
+                            {
+                                params: {
+                                    id: id,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                                location.href=''
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
+                },
+                Pwd: function () {
+                    var ch = this;
+                    var p1 = ch.jpwd;
+                    var p2 = ch.xpwd1;
+                    var p3 = ch.xpwd2;
+                    if (p2 == p3) {
+                        axios
+                            .get('http://localhost:65300/api/Center/KeHuPwd', {
+                                params: {
+                                    id: 12,
+                                    jpwd: p1,
+                                    xpwd: p2,
+                                }
+                            })
+                            .then(function (i) {
+                                ch.update = parseInt(i.data);
+                                if (ch.update > 0) {
+                                    alert('修改成功！！！');
+                                    location.href = '//';
+                                }
+                                else {
+                                    alert('修改失败,旧密码错误！！！');
+                                }
+                            })
+                    }
+                    else {
+                        alert('俩次密码输入的不一样，请从新输入！！');
+                    }
                 }
-
             }
         });
     </script>
