@@ -113,11 +113,12 @@
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==-1?"驳回":item.state==1? "待处理": item.state==2? "正在维修":item.state==3?"完成":"完成"}}</td>
+                <td>{{item.state==-1?"驳回":item.state==0? "待审核": item.state==1? "待接单":item.state==2?"正在维修":"完成"}}</td>
                 <td v-if="item.state==-1"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-sm" /></td>
-                <td v-if="item.state==1">等待通过</td>
+                <td v-if="item.state==1">等待接单</td>
                 <td v-if="item.state==2">正在维修</td>
-                <td v-if="item.state>=3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-sm" /><input id="Button1" type="button" value="投诉" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-danger" /> </td>
+                <td v-if="item.state==0">等待审核</td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="删除" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-sm" /><input id="Button1" type="button" value="投诉" v-on:click="Del(item.urdId)" class="layui-btn layui-btn-danger" /> </td>
             </tr>
         </tbody>
     </table>

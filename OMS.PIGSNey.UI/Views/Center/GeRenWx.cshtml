@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewData["Title"] = "GeRenWx";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<h1>GeRenWx</h1>
+<div id="app">
+    <div class="modal fade" id="addClass2" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">申请材料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>材料名称：</td>
+                                <td>
+                                    <select id="Select1" onselect="haha" v-model="haha">
+                                        <option v-for="(item,index) in option" v-bind:value="item.maId">{{item.materialName}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>数量：</td>
+                                <td><input id="Text1" type="text" v-model="count" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Adds">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addClass3" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">申请材料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>工具名称：</td>
+                                <td>
+                                    <select id="Select1" onselect="hah" v-model="hah">
+                                        <option v-for="(item,index) in option1" v-bind:value="item.tId">{{item.toolName}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Add2">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <td>类型</td>
+            <td><input type="text" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+
+        </tr>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>客户姓名</td>
+                <td>客户手机号</td>
+                <td>类型</td>
+                <td>型号</td>
+                <td>理由</td>
+                <td>状态</td>
+                <td>操作</td>
+                <td>材料审核</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.uName}}</td>
+                <td>{{item.uPhone}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.marque}}</td>
+                <td>{{item.reason}}</td>
+                <td>{{item.state==2?"维修中":"完成"}}</td>
+                <td v-if="item.state==2"><input id="Button1" type="button" value="完成点击" v-on:click="Gai2(item.urdId)" class="layui-btn layui-btn-normal " /></td>
+                <td v-if="item.state==2">
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass2" type="button" value="申请材料" />
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass3" type="button" value="申请工具" />
+                </td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="已完成" class="layui-btn layui-btn-disabled" /></td>
+                <td v-if="item.state==3"><input id="Button1" type="button" value="不可申请材料工具" class="layui-btn layui-btn-disabled" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
+</div>
+@section scripts{ 
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message:"",
+                name: "",
+                meiyetiaoshu: 5,
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+                haha: 0,
+                count: 0,
+                hah: 0,
+                option: "",
+                option1: "",
+                uid: sessionStorage.getItem("UId"),
+                uname1: sessionStorage.getItem("UName"),
+            },
+            mounted() {
+                this.Show();
+                this.Xl();
+                this.Xl2();
+            },
+            methods: {
+                Show: function () {
+                    var a = this;
+                    var i = a.dangqianye;
+                    var m = a.meiyetiaoshu
+                    var n = a.name;
+                    axios
+                        .get('http://localhost:65300/api/Center/GeRenWx', {
+                            params: {
+                                dangqianye: i,
+                                meiyetiaoshu: m,
+                                name:n,
+                            }
+                        })
+                        .then(function (i) {
+                            a.message = i.data.masd;
+                            a.zongyeshu = i.data.zongyeshu;
+                            a.zongtiaoshu = i.data.zongtiaoshu;
+                            a.dangqianye = i.data.dangqianye;
+                        })
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+                Gai2: function (id) {
+                    var hs = this;
+                    var uid = hs.uid;
+                    if (confirm('是否修改！！')) {
+                        axios
+                            .get('http://localhost:65300/api/Center/ZhuangTai4', {
+                                params: {
+                                    id: id,
+                                    uid: 9,
+                                }
+                            })
+                            .then(function (i) {
+                                hs.update1 = parseInt(i.data);
+                                hs.update2 = parseInt(i.data);
+                                if (hs.update1 > 0) {
+                                    if (hs.update2 > 0) {
+                                        alert('修改成功！！');
+                                        location.href = 'http://localhost:49485/Center/WeiXui';
+                                    }
+                                    else {
+                                        alert('修改失败！！');
+                                    }
+                                }
+                                else {
+                                    alert('修改失败！！');
+                                }
+                            })
+                    }
+                },
+                Xl: function () {
+                    var x = this;
+                    axios
+                        .get('http://localhost:65300/api/XY/GetMaterials')
+                        .then(function (i) {
+                            x.option = i.data;
+                        })
+                },
+                Xl2: function () {
+                    var x = this;
+                    axios
+                        .get('http://localhost:65300/api/XY/GetTool')
+                        .then(function (i) {
+                            x.option1 = i.data;
+                        })
+                },
+                Adds: function () {
+                    var b = this;
+                    var maid = b.haha;
+                    var count = b.count;
+                    var uid = b.uid;
+                    alert(uid);
+                    axios
+                        .get('http://localhost:65300/api/XY/AddAF', {
+                            params: {
+                                maid: maid,
+                                MaterialAmount: count,
+                                id: uid,
+                            }
+                        })
+                        .then(function (i) {
+                            b.x = parseInt(i.data);
+                            if (b.x > 0) {
+                                alert('申请成功！！！');
+                            }
+                            else {
+                                alert('申请失败！！！');
+                            }
+                        })
+                },
+                Add2: function () {
+                    var a = this;
+                    var tid = a.hah;
+                    var uid = a.uid;
+                    axios
+                        .get('http://localhost:65300/api/XY/AddAT', {
+                            params: {
+                                id: uid,
+                                tid: tid,
+                            }
+                        })
+                        .then(function (i) {
+                            a.x = parseInt(i.data);
+                            if (a.x > 0) {
+                                alert('申请成功！！！');
+                            }
+                            else {
+                                alert('申请失败！！！');
+                            }
+                        })
+                },
+
+            }
+        })
+    </script>
+}
