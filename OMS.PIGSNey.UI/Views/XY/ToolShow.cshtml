@@ -6,13 +6,15 @@
 <h1>工具显示</h1>
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
 
 <div id="app">
     工具名称：<input v-model="txt_ToolName" type="text" />
 
-    <button v-on:click="Show()">查询</button>
+    <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show()"><i class="layui-icon layui-icon-search"></i></button>
 
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>工具名称</td>
@@ -30,21 +32,21 @@
                     <img v-bind:src="item.img" class="img-box4" width="50" height="50">
                 </td>
                 <td>
-                    <input id="Button1" type="button" value="使用明细" data-toggle="modal" data-target="#UseTool" v-on:click="Use(item.tId)" />
+                    <input id="Button1" type="button" value="使用明细" data-toggle="modal" data-target="#UseTool" v-on:click="Use(item.tId)" class="layui-btn layui-btn-sm"/>
                 </td>
             </tr>
         </tbody>
     </table>
     @*<span>{{hha}}</span>*@
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
             <td>当前是第<span>{{dangqianye}}</span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="First" /></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" /></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" /></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" /></td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm"/></td>
         </tr>
     </table>
 
@@ -52,7 +54,7 @@
     <div class="modal fade" id="UseTool" tabindex="-1" role="dialog" aria-labelledby="XXX"
          style="position: absolute;top: 0;left: 0">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 702px;">
+            <div class="modal-content" style="width: 762px;">
                 <form action="." method="post" class="form-horizontal">
                     <div class="modal-header">
                         <h4 class="modal-title">使用明细</h4>
@@ -62,7 +64,7 @@
 
                     </div>
                     <div class="modal-body">
-                        <table class="table">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
                             <thead>
                                 <tr>
                                     <td>工具名称</td>
@@ -82,10 +84,10 @@
                         </table>
 
                     </div>
-                    
+
                     <div class="modal-footer">
 
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" >关闭</button>
                     </div>
                 </form>
             </div>
@@ -108,12 +110,12 @@
                     zongtiaoshu: 1,
                     tId: 0,
                     mes: "",
-                   
-                    
+
+
                 },
                 mounted() {
                     this.Show();
-                    
+
                 },
                 methods: {
                     Show: function () {
@@ -134,7 +136,7 @@
                                 t.meiyetiaoshu = i.data.meiyetiaoshu;
                                 t.dangqianye = i.data.dangqianye;
                                 t.zongtiaoshu = i.data.zongtiaoshu;
-                                
+
                                 t.message = i.data.masd;
                             })
 
@@ -166,11 +168,11 @@
                         axios
                             .get("http://localhost:65300/api/XY/GetUseTool?TId=" + TId)
                             .then(function (i) {
-                                
+
                                 t.mes = i.data;
                             })
                     }
-                    
+
                 }
 
             })

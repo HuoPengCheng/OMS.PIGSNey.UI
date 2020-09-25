@@ -8,13 +8,16 @@
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
 
 <div id="app">
     材料名称：<input v-model="txt_materialName" type="text" />
     申请人：<input v-model="txt_uName" type="text" />
-    <button v-on:click="Show()">查询</button>
+        <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show()"><i class="layui-icon layui-icon-search"></i></button>
 
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>材料名称</td>
@@ -31,21 +34,21 @@
                 <td>{{item.uName}}</td>
                 <td>{{item.appDate}}</td>
                 <td>
-                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.aId,item.maId)" />
+                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.aId,item.maId)" class="layui-btn layui-btn-sm"/>
                 </td>
             </tr>
         </tbody>
     </table>
     @*<span>{{hha}}</span>*@
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
             <td>当前是第<span>{{dangqianye}}</span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="First" /></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" /></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" /></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" /></td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm"/></td>
         </tr>
     </table>
 
@@ -58,15 +61,15 @@
                 el: "#app",
                 data: {
                     txt_materialName: "",
-                    txt_uName:"",
+                    txt_uName: "",
                     message: "",
                     zongyeshu: 1,
                     dangqianye: 1,
                     meiyetiaoshu: 2,
                     zongtiaoshu: 1,
-                    
+
                     AId: 0,
-                    MAId:0,
+                    MAId: 0,
 
                 },
                 mounted() {
@@ -81,7 +84,7 @@
                             .get('http://localhost:65300/api/XY/ApplyFortbShow', {
                                 params: {
                                     MaterialName: t.txt_materialName,
-                                    UName:t.txt_uName,
+                                    UName: t.txt_uName,
                                     pageIndex: i,
                                     pageSize: 2,
 
@@ -121,19 +124,19 @@
                         this.Show();
                     },
                     ShenHe: function (aId, maId) {
-                       
-                         var t = this;
+
+                        var t = this;
                         axios
                             .get("http://localhost:65300/api/XY/UpdAf", {
                                 params: {
                                     AId: aId,
                                     MAId: maId,
-                                    
+
                                 }
                             })
                             .then(function (i) {
-                               
-                                if (i.data>0) {
+
+                                if (i.data > 0) {
                                     alert("审核成功");
                                     location.href = '/XY/MaterialShenHe'
                                 }

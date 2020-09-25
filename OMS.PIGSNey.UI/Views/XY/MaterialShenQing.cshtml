@@ -7,6 +7,9 @@
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
 
 
 <div id="app">
@@ -21,8 +24,8 @@
         </tr>
         <tr>
             <td>申请数量</td>
-            <td><input id="Text1" type="text" v-model="MAmount"/></td>
-            
+            <td><input id="Text1" type="text" v-model="MAmount" /></td>
+
         </tr>
         <tr>
             <td colspan="4"><input id="Button1" v-on:click="Add" type="button" value="提交" class="btn btn-group" /></td>
@@ -30,16 +33,16 @@
     </table>
 </div>
 
-@section scripts{ 
-<script>
-    var vue = new Vue({
-        el: "#app",
+@section scripts{
+    <script>
+        var vue = new Vue({
+            el: "#app",
 
-        data: {
+            data: {
 
-        }
-    })
+            }
+        })
 
-</script>
+    </script>
 
 }

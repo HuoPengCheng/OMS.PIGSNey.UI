@@ -8,12 +8,18 @@
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
 
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
+
+
 <div id="app">
     工具名称：<input v-model="txt_toolName" type="text" />
     申请人：<input v-model="txt_uName" type="text" />
-    <button v-on:click="Show()">查询</button>
+    
+    <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show()"><i class="layui-icon layui-icon-search"></i></button>
 
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
             <tr>
                 <td>工具名称</td>
@@ -28,21 +34,21 @@
                 <td>{{item.uName}}</td>
                 <td>{{item.appDate}}</td>
                 <td>
-                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.atId)" />
+                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.atId)" class="layui-btn layui-btn-sm"/>
                 </td>
             </tr>
         </tbody>
     </table>
     @*<span>{{hha}}</span>*@
-    <table class="table">
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
             <td>当前是第<span>{{dangqianye}}</span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="First" /></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" /></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" /></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" /></td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm"/></td>
         </tr>
     </table>
 
