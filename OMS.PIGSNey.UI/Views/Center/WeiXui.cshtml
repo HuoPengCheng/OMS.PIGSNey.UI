@@ -311,11 +311,12 @@
                 Gai1: function (id) {
                     var hs = this;
                     var ids = id;
-                    alert(id);
+                    var uid = hs.uid;
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai2', {
                                 params: {
+                                    id: uid,
                                     id2: ids
                                 }
                             })
@@ -339,11 +340,13 @@
                 },
                 Gai2: function (id) {
                     var hs = this;
+                    var uid = hs.uid;
                     if (confirm('是否修改！！')) {
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai4', {
                                 params: {
-                                    id: id
+                                    id: id,
+                                    uid: 9,
                                 }
                             })
                             .then(function (i) {
