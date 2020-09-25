@@ -12,7 +12,9 @@
 
 <div id="app">
     材料名称：<input v-model="txt_MaterialName" type="text" />
-    材料类别：
+    材料类别：@*<select id="Category" onselect="hha" v-model="hha">
+            <option v-for="(item,index) in OPtions" v-bind:value="item.cId">{{item.cName}}</option>
+        </select>*@
 <select v-model="options" id="drop">
     <option value="0">===请选择===</option>
     <option v-for="(item,index) in OPtions" :key="index" :value="item.cId">{{item.cName}}</option>
