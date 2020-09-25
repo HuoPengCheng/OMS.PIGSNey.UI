@@ -31,17 +31,17 @@ namespace OMS.PIGSNey.UI.Controllers
             return View();
         }
 
-        public IActionResult MaterialShenQing()
-        {
+        //public IActionResult MaterialShenQing()
+        //{
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        public IActionResult ToolShenQing()
-        {
+        //public IActionResult ToolShenQing()
+        //{
 
-            return View();
-        }
+        //    return View();
+        //}
 
 
     }
