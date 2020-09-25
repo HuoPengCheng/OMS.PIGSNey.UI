@@ -12,8 +12,8 @@
 
 <div id="app">
     材料名称：<input v-model="txt_MaterialName" type="text" />
-    材料类别：<select id="Category" onselect="hha" v-model="hha">
-        <option v-for="(item,index) in OPtions" v-bind:value="item.cId">{{item.cName}}</option>
+    材料类别：<select id="Category" onselect="hha" v-model="hha ">
+        <option v-for="(item,index) in OPtions" v-bind:value="item.cId" :key="index":value="item.cId">{{item.cName}}</option>
     </select>
     <button v-on:click="Show()" class="layui-btn layui-btn-sm">查询</button>
     <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
@@ -160,7 +160,7 @@
 
                 data: {
                     txt_MaterialName: "",
-                    OPtions: [],
+                    OPtions: "",
                     message: "",
                     zongyeshu: 1,
                     dangqianye: 1,

@@ -9,7 +9,7 @@
 <h1>WeiXui</h1>
 
 <div id="app">
-    <p1>登陆人：{{uname1}}</p1>
+    @*<p1>登陆人：{{uname1}}</p1>*@
     <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan" />
     <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
          style="position: absolute;top: 0;left: 0">
@@ -95,20 +95,56 @@
                         <h4 class="modal-title">申请材料</h4>
                     </div>
                     <div class="modal-body">
-                        <table>
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
                             <tr>
                                 <td>材料名称：</td>
                                 <td>
-                                    <select id="Select1">
-                                        <option>--请选择--</option>
+                                    <select id="Select1" onselect="haha" v-model="haha">
+                                        <option v-for="(item,index) in option" v-bind:value="item.maId">{{item.materialName}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>数量：</td>
+                                <td><input id="Text1" type="text" v-model="count" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Adds" >完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+
+    <div class="modal fade" id="addClass3" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">申请材料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>工具名称：</td>
+                                <td>
+                                    <select id="Select1" onselect="hah" v-model="hah">
+                                        <option v-for="(item,index) in option1" v-bind:value="item.tId">{{item.toolName}}</option>
                                     </select>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Pwd">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Add2">完成</button>
                         <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
                     </div>
                 </form>
@@ -148,11 +184,17 @@
                 <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已完成"}}</td>
                 <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" class="layui-btn layui-btn-normal " /></td>
                 <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" class="layui-btn layui-btn-warm" /></td>
-                <td v-if="item.state==2"><input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass2" type="button" value="申请材料" />
-                <td v-if="item.state==3"><input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass2" type="button" value="申请材料" />
+                <td v-if="item.state==2">
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass2" type="button" value="申请材料" />
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass3" type="button" value="申请工具" />
+                </td>
+                <td v-if="item.state==3">
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass2" type="button" value="申请材料" />
+                    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass3" type="button" value="申请工具" />
+                </td>
                 <td v-if="item.state==4"><input id="Button1" type="button" value="已完成" class="layui-btn layui-btn-disabled" /></td>
-                <td v-if="item.state==4"><input id="Button1" type="button" value="不可以申请材料" class="layui-btn layui-btn-disabled" /></td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="不可以申请材料" class="layui-btn layui-btn-disabled" /></td>
+                <td v-if="item.state==4"><input id="Button1" type="button" value="不可以申请材料" class="layui-btn layui-btn-disabled" /><input id="Button1" type="button" value="不可以工具" class="layui-btn layui-btn-disabled" /></td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="不可以申请材料" class="layui-btn layui-btn-disabled" /><input id="Button1" type="button" value="不可以工具" class="layui-btn layui-btn-disabled" /></td>
             </tr>
         </tbody>
     </table>
@@ -172,6 +214,7 @@
             <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
+
 </div>
 @section scripts{
     <script>
@@ -187,9 +230,19 @@
                 name: "",
                 uid: sessionStorage.getItem("UId"),
                 uname1: sessionStorage.getItem("UName"),
+                option: "",
+                option1: "",
+                jpwd:"",
+                xpwd1:"",
+                xpwd2: "",
+                haha: 0,
+                count: 0,
+                hah: 0.
             },
             mounted() {
                 this.Show();
+                this.Xl();
+                this.Xl2();
             },
             methods: {
                 Show: function () {
@@ -377,7 +430,67 @@
                     else {
                         alert('俩次密码输入的不一样，请从新输入！！');
                     }
-                }
+                },
+                Xl: function () {
+                    var x = this;
+                    axios
+                        .get('http://localhost:65300/api/XY/GetMaterials')
+                        .then(function (i) {
+                            x.option = i.data;
+                        })
+                },
+                Xl2: function () {
+                    var x = this;
+                    axios
+                        .get('http://localhost:65300/api/XY/GetTool')
+                        .then(function (i) {
+                            x.option1 = i.data;
+                        })
+                },
+                Adds: function () {
+                    var b = this;
+                    var maid = b.haha;
+                    var count = b.count;
+                    var uid = b.uid;
+                    axios
+                        .get('http://localhost:65300/api/XY/AddAF',{
+                            params: {
+                                maid:maid,
+                                MaterialAmount: count,
+                                id: uid,
+                            }
+                        })
+                        .then(function (i) {
+                            b.x = parseInt(i.data);
+                            if (b.x > 0) {
+                                alert('申请成功！！！');
+                            }
+                            else {
+                                alert('申请失败！！！');
+                            }
+                        })
+                },
+                Add2: function () {
+                    var a = this;
+                    var tid = a.hah;
+                    var uid = a.uid;
+                    axios
+                        .get('http://localhost:65300/api/XY/AddAT', {
+                            params: {
+                                id: uid,
+                                tid: tid,
+                            }
+                        })
+                        .then(function (i) {
+                            a.x = parseInt(i.data);
+                            if (a.x > 0) {
+                                alert('申请成功！！！');
+                            }
+                            else {
+                                alert('申请失败！！！');
+                            }
+                        })
+                },
             }
         });
     </script>
