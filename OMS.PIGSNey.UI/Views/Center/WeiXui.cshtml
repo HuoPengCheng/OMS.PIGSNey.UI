@@ -80,7 +80,7 @@
                     axios
                         .get('http://localhost:65300/api/Center/WeiXui', {
                             params: {
-                                uid: 9,
+                                uid: uid,
                                 name: n,
                                 dangqianye: i,
                                 meiyetiaoshu: m
@@ -142,18 +142,18 @@
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai2', {
                                 params: {
-                                    id: 7,
+                                    id: uid,
                                     id2: ids
                                 }
                             })
-                            .then(function (i) {
+                            .then(i=>{
                                 hs.update1 = parseInt(i.data);
                                 hs.update2 = parseInt(i.data);
                                 if (hs.update1 > 0) {
                                     if (hs.update2 > 0) {
                                         alert('接单成功！！');
                                         this.Add(ids);
-                                        location.href = 'http://localhost:49485/Center/GeRenWx';
+                                        location.href = 'http://localhost:49485/Center/Weixui';
                                     }
                                     else {
                                         alert('接单失败！！');
@@ -172,7 +172,7 @@
                         .get('http://localhost:65300/api/Center/Add',{
                             params: {
                                 urdid: id,
-                                uid:7,
+                                uid:uid,
                             }
                         })
                         .then(function (i) {
