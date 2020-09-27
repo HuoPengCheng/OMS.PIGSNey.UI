@@ -142,7 +142,7 @@
                         axios
                             .get('http://localhost:65300/api/Center/ZhuangTai2', {
                                 params: {
-                                    id: uid,
+                                    id: 9,
                                     id2: ids
                                 }
                             })
@@ -154,6 +154,7 @@
                                         alert('接单成功！！');
                                         this.Add(ids);
                                         location.href = 'http://localhost:49485/Center/Weixui';
+                                        location.href = 'http://localhost:49485/Center/GeRenWx';
                                     }
                                     else {
                                         alert('接单失败！！');
