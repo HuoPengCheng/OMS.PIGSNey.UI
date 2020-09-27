@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "Qx";
+}
+
+<h1>Qx</h1>
+<script src="~/layui-v2.5.6/layui/layui.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin" id="app">
+        <div class="layui-side layui-bg-blue">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;">角色</a>
+                        <dl class="layui-nav-child layui-bg-blue">
+                            <dd><a href="javascript:a;">超级管理员</a></dd>
+                            <dd><a href="javascript:b;">管理员</a></dd>
+                            <dd><a href="javascript:c;">维修员</a></dd>
+                            <dd><a href="javascript:d;">客户</a></dd>
+                        </dl>
+                    </li>
+                    </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">内容主体区域</div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    <script src="../src/layui.js"></script>
+    <script>
+        function TZYM(type) {
+            //src拼接跳转页面 要跳转那个页面 请参考员工签到对应的字母 /控制器名字/方法名 列如‘/Interface/Add'
+            switch (type) {
+                case "a":
+                    document.getElementById("tz").src = '/Manpower/EmpShow';
+                    break;
+                case "b":
+                    document.getElementById("tz").src = '/Leave/Add';
+                    break;
+                case "c":
+                    document.getElementById("tz").src = '/User/IndexUser';
+                    break;
+                case "e":
+                    document.getElementById("tz").src = '/Dep/IndexDep';
+                    break;
+                default:
+            }
+        }
+
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    </script>
+</body>
+</html>

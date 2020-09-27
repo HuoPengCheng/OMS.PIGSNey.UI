@@ -8,6 +8,10 @@
 <link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
 <script src="~/static/admin/layui/layui.js"></script>
 <h1>Show</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
 <div id="app">
     <table class="table table-bordered">
         <tr>
@@ -72,98 +76,9 @@
             <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Last" value="尾页" /></td>
         </tr>
     </table>
-
-
-
-    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
-         style="position: absolute;top: 0;left: 0">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="." method="post" class="form-horizontal">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">订单编号:</label>
-                            <label for="inputEmail3">{{ddbh}}</label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">商品类型:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{splx}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">商品型号:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{spxh}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">维修等级:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxdj==1?"日常":wxdj==2? "应急":"紧急"}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">维修原因:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxyy}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">  地址:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{dz}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">详细地址:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{xxdz}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">申请日期:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{sqrq}}</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">维修状态:</label>
-                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxzt==0?"待审核":wxzt==1?"待维修":wxzt==2?"维修中":"已完成"}}</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="UseMaterial" tabindex="-1" role="dialog" aria-labelledby="XXX"
-         style="position: absolute;top: 0;left: 0">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 702px;">
-                <form action="." method="post" class="form-horizontal">
-                    <div class="modal-header">
-                        <h4 class="modal-title">消息</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table" v-for="item in response">
-                            <tr>
-                                <td>尊敬的{{item.uName}}用户您好    您的订单{{item.ordernumber}}     于{{item.promptTime}}    返回信息:{{item.promptContent}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-
 </div>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
 @section scripts{
     <script>
         var app = new Vue({
@@ -285,6 +200,7 @@
                     this.dangqianye = this.zongyeshu;
                     this.Show();
                 },
+                        
             }
         })
     </script>

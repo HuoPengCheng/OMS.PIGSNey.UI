@@ -17,7 +17,19 @@ namespace OMS.PIGSNey.UI.Controllers
         {
             return View();
         }
-    
+        public IActionResult Qx()
+        {
+            return View();
+        }
+        public IActionResult Sel()
+        {
+            return View();
+        }
+
+        public IActionResult Moban()
+        {
+            return View();
+        }
 
     }
 }
