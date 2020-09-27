@@ -16,8 +16,12 @@
 <div id="app">
     工具名称：<input v-model="txt_toolName" type="text" />
     申请人：<input v-model="txt_uName" type="text" />
-    
+
     <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show()"><i class="layui-icon layui-icon-search"></i></button>
+
+    <input id="Button1" type="button" value="全部" class="layui-btn layui-btn-radius" v-on:click="Quan()" data-toggle="modal" data-target="#QuanBu" />
+    <input id="Button1" type="button" value="驳回" class="layui-btn layui-btn-radius" v-on:click="bo()" data-toggle="modal" data-target="#bohui" />
+    <input id="Button1" type="button" value="通过" class="layui-btn layui-btn-radius" v-on:click="Tong()" data-toggle="modal" data-target="#Tong" />
 
     <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <thead>
@@ -34,26 +38,194 @@
                 <td>{{item.uName}}</td>
                 <td>{{item.appDate}}</td>
                 <td>
-                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.atId)" class="layui-btn layui-btn-sm"/>
+                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.atId)" class="layui-btn layui-btn-sm" />
+                    <input id="Button1" type="button" value="驳回" v-on:click="bohui(item.atId)" class="layui-btn layui-btn-sm" />
                 </td>
             </tr>
         </tbody>
     </table>
-    @*<span>{{hha}}</span>*@
+    @*<span>{{hha}}</span>data-toggle="modal" data-target="#bohui"*@
     <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
             <td>当前是第<span>{{dangqianye}}</span>页</td>
-            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm"/></td>
-            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm"/></td>
-            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm"/></td>
-            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
 
+
+    @*全部模态框*@
+
+    <div class="modal fade" id="QuanBu" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0;height:500px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 762px;">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <h4 class="modal-title">全部记录</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <thead>
+                                <tr>
+                                    <td>工具名称</td>
+                                    <td>维修人（申请人）</td>
+                                    <td>申请时间</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody v-for="item in mes">
+                                <tr>
+                                    <td>{{item.toolName}}</td>
+                                    <td>{{item.uName}}</td>
+                                    <td>{{item.appDate}}</td>
+                                    <td>{{item.aStatic==0?"待审核":item.aStatic==1? "已审核": item.aStatic==2? "已驳回":""}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*驳回模态框*@
+
+    <div class="modal fade" id="bohui" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0;height:500px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 762px; ">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <h4 class="modal-title">驳回记录</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <thead>
+                                <tr>
+                                    <td>工具名称</td>
+                                    <td>维修人（申请人）</td>
+                                    <td>申请时间</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody v-for="item in mes">
+                                <tr>
+                                    <td>{{item.toolName}}</td>
+                                    <td>{{item.uName}}</td>
+                                    <td>{{item.appDate}}</td>
+                                    <td>{{item.aStatic==2? "驳回":""}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*通过模态框*@
+
+    <div class="modal fade" id="Tong" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0;height:500px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 762px;">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <h4 class="modal-title">通过记录</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <thead>
+                                <tr>
+                                    <td>工具名称</td>
+                                    <td>维修人（申请人）</td>
+                                    <td>申请时间</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody v-for="item in mes">
+                                <tr>
+                                    <td>{{item.toolName}}</td>
+                                    <td>{{item.uName}}</td>
+                                    <td>{{item.appDate}}</td>
+                                    <td>{{item.aStatic==1? "通过":""}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+
+<style>
+    .modal-dialog { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+} 
+
+.modal-content { 
+    /*overflow-y: scroll; */ 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+} 
+
+.modal-body { 
+    overflow-y: scroll; 
+    position: absolute; 
+    top: 55px; 
+    bottom: 65px; 
+    width: 100%; 
+} 
+
+.modal-header .close {margin-right: 15px;} 
+
+.modal-footer {
+    position: absolute; 
+    width: 100%; 
+    bottom: 0; 
+}
+</style>
 @section scripts{
     <script>
         new Vue(
@@ -67,6 +239,8 @@
                     dangqianye: 1,
                     meiyetiaoshu: 2,
                     zongtiaoshu: 1,
+
+                    mes:"",
 
                     ATId: 0,
 
@@ -100,6 +274,45 @@
                                 t.message = i.data.masd;
                             })
 
+                    },
+                    bo: function () {
+                        var t = this;
+                        axios
+                            .get("http://localhost:65300/api/XY/AddToolBo")
+                            .then(function (i) {
+                                 t.mes = i.data;
+                            })
+                    },
+                    Tong: function () {
+                        var t = this;
+                        axios
+                            .get('http://localhost:65300/api/XY/AddToolTong')
+                            .then(function (i) {
+                                t.mes = i.data;
+                            })
+                    },
+                    Quan: function () {
+                        var t = this;
+                        axios
+                            .get('http://localhost:65300/api/XY/AddToolAll')
+                            .then(function (i) {
+                                t.mes = i.data;
+                            })
+                    },
+                    bohui: function (atId) {
+                        var t = this;
+                       
+                         axios
+                            .get('http://localhost:65300/api/XY/UpdATBo?atid='+atId)
+                            .then(function (i) {
+                                if (i.data > 0) {
+                                    alert("驳回成功");
+                                    location.href = "/XY/ToolShenHe"
+                                }
+                                else {
+                                    alert("驳回失败");
+                                }
+                            })
                     },
                     First: function () {
                         this.dangqianye = 1;
