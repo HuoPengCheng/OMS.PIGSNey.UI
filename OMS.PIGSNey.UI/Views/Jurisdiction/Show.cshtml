@@ -9,9 +9,6 @@
 
 
 <div id="app">
-    <script>
-        
-    </script>
     <h2>当前登录人:{{Uname}}</h2>
     <table class="table table-bordered">
         <tr>
@@ -95,7 +92,7 @@
                 sjh: "",
                 zh: "",
             },
-            mounted() { this.Show(), alert(sessionStorage.getItem("UName")); },
+            mounted() { this.Show()  },
             methods: {
                 Show: function () {
                     var ch = this;

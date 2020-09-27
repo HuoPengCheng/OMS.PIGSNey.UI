@@ -4,6 +4,10 @@
 }
 
 <h1>Show</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
 <div id="app">
     <table class="table table-bordered">
         <tr>
@@ -13,7 +17,7 @@
             <td>结束日期</td>
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
             <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
-            <td><input id="Button1" type="button" value="查询" v-on:click="Show"/></td>
+            <td><input id="Button1" type="button" value="查询" v-on:click="Show" /></td>
         </tr>
     </table>
     <table class="table table-bordered">
@@ -58,8 +62,7 @@
         </tr>
     </table>
 </div>
-<script src="~/js/vue.js"></script>
-<script src="~/js/axios.js"></script>
+
 @section scripts{
     <script>
         var app = new Vue({
@@ -96,7 +99,7 @@
                             t.zongyeshu = i.data.zongyeshu;
                             t.zongtiaoshu = i.data.zongtiaoshu;
                             t.dangqianye = i.data.dangqianye;
-                            
+
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -107,7 +110,7 @@
                 },
                 Prv: function () {
                     this.dangqianye--;
-                    if (this.dangqianye<1) {
+                    if (this.dangqianye < 1) {
                         alert("已经是第一页了");
                         this.dangqianye++;
                     }
@@ -125,7 +128,7 @@
                     this.dangqianye = this.zongyeshu;
                     this.Show();
                 },
-                        
+
             }
         })
 

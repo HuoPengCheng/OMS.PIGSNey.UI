@@ -33,7 +33,6 @@
         <tr>
             <td>
                 <input id="Button1" type="button" value="登录" v-on:click="Denglu" />
-                <input id="Button1" type="button" value="注册" v-on:click="Zhuce" />
             </td>
         </tr>
     </table>
@@ -41,17 +40,6 @@
 
 @section scripts{
     <script>
-        var jschars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-        function generateMixed(9) {
-            var res = "";
-            for (var i = 0; i < 9; i++) {
-                var id = Math.ceil(Math.random() * 35);
-                res += jschars[id];
-            }
-            return res;
-            alert(res);
-        }
-        
         var app = new Vue({
             el: "#app",
             data: {
@@ -73,12 +61,13 @@
             methods: {
                 Denglu: function () {
                     var t = this;
-                    axios.get("http://localhost:65300/api/Denglu", {
+                    axios
+                        .get("http://localhost:65300/api/Denglu", {
                         params: {
                             name: t.name,
                             pass: t.mima,
-                        }
-                    })
+                            }
+                        })
                         .then(function (i) {
 
                             if (i.data > 0) {
@@ -90,27 +79,29 @@
                                     }
 
                                 })
-                                    .then(function (d) {
+                                     .then(function (d) {
                                         t.uId = d.data[0].uId;
+                                        t.rId = d.data[0].rId;
                                         t.uName = d.data[0].uName;
                                         t.uAccount = d.data[0].uAccount;
                                         t.uPwd = d.data[0].uPwd;
                                         t.uPhone = d.data[0].uPhone;
                                         t.uState = d.data[0].uState;
                                         sessionStorage.setItem("UId", t.uId);
+                                        sessionStorage.setItem("RId", t.rId);
                                         sessionStorage.setItem("UName", t.uName);
                                         sessionStorage.setItem("UAccount", t.uAccount);
                                         sessionStorage.setItem("UPwd", t.uPwd);
                                         sessionStorage.setItem("UPhone", t.uPhone);
                                         sessionStorage.setItem("UState", t.uState);
-                                        alert(sessionStorage.getItem("UAccount"));
+                                         location.href = "/Jurisdiction/Moban";
 
                                     })
                                 //alert(sessionStorage.getItem("UName"));
                                 //alert(sessionStorage.getItem("UAccount"));
-                                //alert(sessionStorage.getItem("UPwd"));
+                                //alert(sessionStor0age.getItem("UPwd"));
                                 ////alert(sessionStorage.getItem("UState"));
-                                location.href = "/Jurisdiction/Show";
+                                
                             }
                             else {
                                 alert("登录失败");
