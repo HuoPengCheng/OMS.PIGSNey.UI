@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Img\1.jpg" />
+    <None Include="wwwroot\Img\10.jpg" />
+    <None Include="wwwroot\Img\2.jpg" />
+    <None Include="wwwroot\Img\3.jpg" />
+    <None Include="wwwroot\Img\4.jpg" />
+    <None Include="wwwroot\Img\5.jpg" />
+    <None Include="wwwroot\Img\6.jpg" />
+    <None Include="wwwroot\Img\7.jpg" />
+    <None Include="wwwroot\Img\8.jpg" />
+    <None Include="wwwroot\Img\9.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="axios.js" Version="0.18.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>

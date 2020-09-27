@@ -3,6 +3,10 @@
     ViewData["Title"] = "Show";
 }
 
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<script src="~/static/admin/layui/layui.js"></script>
 <h1>Show</h1>
 
 <script src="~/js/vue.js"></script>
@@ -16,11 +20,16 @@
             <td>-</td>
             <td>结束日期</td>
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
-            <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
-            <td><input id="Button1" type="button" value="查询" v-on:click="Show" /></td>
+            <td><input id="Text1" type="text" v-model="name" lay-verify="required" class="layui-input" placeholder="根据商品订单查询" /></td>
+            <td>
+                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show">查询</button>
+            </td>
+            <td>
+                <img src="/TheorderdetailsImg/QQ图片20200924143148.png" data-toggle="modal" data-target="#UseMaterial" title="查看回访消息" v-on:click="XX()" style="width:42px;height:35px" alt="" />
+            </td>
         </tr>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <thead>
             <tr>
                 <td>订单编号</td>
@@ -32,6 +41,7 @@
                 <td>  地址  </td>
                 <td>详细地址</td>
                 <td>申请日期</td>
+                <td>维修状态</td>
                 <td>操作</td>
             </tr>
         </thead>
@@ -40,13 +50,18 @@
                 <td>{{i.ordernumber}}</td>
                 <td>{{i.type}}</td>
                 <td>{{i.marque}}</td>
-                <td>{{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}</td>
+                <td>
+                    {{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}
+                </td>
                 <td>{{i.cause}}</td>
                 <td>{{i.reason}}</td>
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
-                <td></td>
+                <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
+                <td v-if="i.state==0||i.state==1||i.state==2"><input id="Button1" type="button" class="btn btn-danger" value="取消订单" v-on:click="Del(i.urdId)" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
+                <td v-if="i.state==3"><input id="Button1" type="button" class="btn btn-danger" value="意见回复" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
+                <td v-if="i.state==-1"><input id="Button1" type="button" class="btn btn-danger" value="再次申请" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
             </tr>
         </tbody>
     </table>
@@ -62,19 +77,30 @@
         </tr>
     </table>
 </div>
-
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
 @section scripts{
     <script>
         var app = new Vue({
             el: '#app',
             data: {
                 emps: '',
+                response: '',
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
                 name: "",
                 st: "",
                 et: "",
+                ddbh: "",
+                splx: "",
+                spxh: "",
+                wxdj: "",
+                wxyy: "",
+                dz: "",
+                xxdz: "",
+                sqrq: "",
+                wxzt: ""
             },
             mounted() {
                 this.Show();
@@ -104,6 +130,52 @@
                             console.log(error);
                         });
                 },
+                XQ: function (id) {
+                    var t = this
+                    axios
+                        .get("http://localhost:65300/api/UserGetFT?UrdId=" + id)
+                        .then(function (i) {
+                            t.ddbh = i.data[0].ordernumber,
+                                t.splx = i.data[0].type,
+                                t.spxh = i.data[0].marque,
+                                t.wxdj = i.data[0].degree,
+                                t.wxyy = i.data[0].reason,
+                                t.dz = i.data[0].address,
+                                t.xxdz = i.data[0].detailedAddress,
+                                t.sqrq = i.data[0].date,
+                                t.wxzt = i.data[0].state,
+                                t.name = i.data[0].ordernumber
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                XX: function () {
+                    alert("查看消息");
+                    var t = this
+                    axios
+                        .get("http://localhost:65300/api/GetResponse?UId=" + 12)
+                        .then(function (i) {
+                            t.response = i.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                Del: function (id) {
+                    var t = this
+                    if (confirm("是否取消订单")) {
+                        axios
+                            .get("http://localhost:65300/api/UserDelURD?UrdId=" + id)
+                            .then(function (i) {
+                                if (i.data > 0) {
+                                    alert("取消成功");
+                                    t.Show();
+                                }
+                                else {
+                                    alert("取消失败");
+                                }
+                            })
+                    }
+                },
                 First: function () {
                     this.dangqianye = 1;
                     this.Show();
@@ -128,9 +200,9 @@
                     this.dangqianye = this.zongyeshu;
                     this.Show();
                 },
-
+                        
             }
         })
-
     </script>
+
 }

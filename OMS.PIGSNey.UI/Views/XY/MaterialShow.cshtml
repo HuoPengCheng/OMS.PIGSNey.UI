@@ -1,0 +1,284 @@
+﻿
+@{
+    ViewData["Title"] = "MaterialShow";
+}
+
+<h1>材料显示</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
+<div id="app">
+    材料名称：<input v-model="txt_MaterialName" type="text" />
+    材料类别：<select id="Category" onselect="hha" v-model="hha ">
+        <option v-for="(item,index) in OPtions" v-bind:value="item.cId" :key="index":value="item.cId">{{item.cName}}</option>
+    </select>
+    <button v-on:click="Show()" class="layui-btn layui-btn-sm">查询</button>
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <thead>
+            <tr>
+                <td>材料名称</td>
+                <td>当前剩余量</td>
+                <td>材料类别</td>
+                <td>规格</td>
+                <td>图片</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.materialName}}</td>
+                <td>{{item.mAmount}}</td>
+                <td>{{item.cName}}</td>
+                <td>{{item.mSpecification}}</td>
+                <td>
+
+                    <img v-bind:src="item.mImg" class="img-box4" width="50" height="50">
+                </td>
+                <td>
+                    <input id="Button1" class="layui-btn layui-btn-sm" type="button" value="采购" data-toggle="modal" data-target="#Cai" v-on:click="AddMaterial(item.maId)" />
+                    <input id="Button1" class="layui-btn layui-btn-sm" type="button" value="使用明细" data-toggle="modal" data-target="#UseMaterial" v-on:click="Use(item.maId)" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    @*<span>{{hha}}</span>*@
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <colgroup>
+
+            <col width="200">
+            <col width="150">
+            <col>
+        </colgroup>
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm" /></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
+        </tr>
+    </table>
+
+    @*采购模态框*@
+    <div class="modal fade" id="Cai" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">采购</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">材料名称:</label>
+                            <label for="inputEmail3">{{materialName}}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">类别:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{mSpecification}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">数量:</label>
+                            <input id="txt_MAmount" v-model="MAmount" type="text" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="caigou">采购</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    @*使用明细模态框*@
+    <div class="modal fade" id="UseMaterial" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 702px;">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <h4 class="modal-title">使用明细</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>材料名称</td>
+                                    <td>维修人</td>
+                                    <td>维修商品</td>
+                                    <td>类型</td>
+                                    <td>维修状态</td>
+                                    <td>手机号</td>
+                                    <td>领取时间</td>
+                                </tr>
+                            </thead>
+                            <tbody v-for="item in mes">
+                                <tr>
+                                    <td>{{item.materialName}}</td>
+                                    <td>{{item.uName}}</td>
+                                    <td>{{item.marque}}</td>
+                                    <td>{{item.type}}</td>
+                                    <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
+                                    <td>{{item.uPhone}}</td>
+                                    <td>{{item.auditDate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        var vue = new Vue(
+            {
+                el: "#app",
+
+                data: {
+                    txt_MaterialName: "",
+                    OPtions: "",
+                    message: "",
+                    zongyeshu: 1,
+                    dangqianye: 1,
+                    meiyetiaoshu: 2,
+                    zongtiaoshu: 1,
+                    hha: 0,
+                    materialName: "",
+                    mSpecification: "",
+                    MAmount: 0,
+                    MAId: 0,
+                    mes: "",
+
+                },
+                mounted() {
+                    this.Show();
+                    this.Xl();
+                },
+                methods: {
+                    Show: function () {
+                        var t = this;
+                        var i = t.dangqianye;
+                        var n = t.hha;
+
+                        axios
+                            .get('http://localhost:65300/api/XY/MaterialShow', {
+                                params: {
+                                    MaterialName: t.txt_MaterialName,
+                                    CId: n,
+                                    pageIndex: i,
+                                    pageSize: 2,
+
+                                }
+                            })
+                            .then(function (i) {
+                                t.zongyeshu = i.data.zongyeshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.meiyetiaoshu = i.data.meiyetiaoshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.zongtiaoshu = i.data.zongtiaoshu;
+                                t.hha = i.data.masd.CId;
+                                t.message = i.data.masd;
+                            })
+
+                    },
+                    First: function () {
+                        this.dangqianye = 1;
+                        this.Show();
+                    },
+                    Prv: function () {
+                        this.dangqianye--;
+                        if (this.dangqianye < 1) {
+                            this.dangqianye++;
+                        }
+                        this.Show();
+                    },
+                    Next: function () {
+                        this.dangqianye++;
+                        if (this.dangqianye > this.zongyeshu) {
+                            this.dangqianye--;
+                        }
+                        this.Show();
+                    },
+                    Last: function () {
+                        this.dangqianye = this.zongyeshu;
+                        this.Show();
+                    },
+                    Xl: function () {
+                        var x = this;
+                        axios
+                            .get('http://localhost:65300/api/XY/GetCategory')
+                            .then(function (i) {
+                                x.OPtions = i.data;
+                            })
+                    },
+                    AddMaterial: function (maId) {
+                        var t = this;
+                        axios
+                            .get("http://localhost:65300/api/XY/GetMAterialById?MAId=" + maId)
+                            .then(function (i) {
+                                t.materialName = i.data[0].materialName,
+                                    t.mSpecification = i.data[0].mSpecification,
+                                    t.MAId = i.data[0].maId
+                            })
+                    },
+                    caigou: function (maId) {
+                        var t = this;
+
+                        var Amount = t.MAmount;
+                        axios
+                            .get("http://localhost:65300/api/XY/AddMamount", {
+                                params: {
+                                    MAId: this.MAId,
+                                    MAmount: Amount,
+                                }
+                            })
+                            .then(function (i) {
+                                t.update = parseInt(i.data);
+                                if (t.update > 0) {
+                                    alert("采购成功");
+                                    location.href = '/XY/MaterialShow'
+                                }
+                                else {
+                                    alert("采购失败");
+                                }
+
+                            })
+                    },
+                    Use: function (maId) {
+                        var t = this;
+                        axios
+                            .get("http://localhost:65300/api/XY/GetUseMaterial?MAId=" + maId)
+                            .then(function (i) {
+
+                                t.mes = i.data;
+                            })
+                    }
+                }
+
+            })
+    </script>
+}

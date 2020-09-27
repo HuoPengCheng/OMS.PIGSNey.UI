@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewData["Title"] = "ToolShenHe";
+}
+
+<h1>工具审核显示</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
+
+
+<div id="app">
+    工具名称：<input v-model="txt_toolName" type="text" />
+    申请人：<input v-model="txt_uName" type="text" />
+    
+    <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show()"><i class="layui-icon layui-icon-search"></i></button>
+
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <thead>
+            <tr>
+                <td>工具名称</td>
+                <td>维修人（申请人）</td>
+                <td>申请时间</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in message">
+            <tr>
+                <td>{{item.toolName}}</td>
+                <td>{{item.uName}}</td>
+                <td>{{item.appDate}}</td>
+                <td>
+                    <input id="Button1" type="button" value="审核" v-on:click="ShenHe(item.atId)" class="layui-btn layui-btn-sm"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @*<span>{{hha}}</span>*@
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" type="button" value="首页" v-on:click="First" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="上一页" v-on:click="Prv" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="下一页" v-on:click="Next" class="layui-btn layui-btn-sm"/></td>
+            <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm"/></td>
+        </tr>
+    </table>
+
+</div>
+
+@section scripts{
+    <script>
+        new Vue(
+            {
+                el: "#app",
+                data: {
+                    txt_toolName: "",
+                    txt_uName: "",
+                    message: "",
+                    zongyeshu: 1,
+                    dangqianye: 1,
+                    meiyetiaoshu: 2,
+                    zongtiaoshu: 1,
+
+                    ATId: 0,
+
+
+                },
+                mounted() {
+                    this.Show();
+
+                },
+                methods: {
+                    Show: function () {
+                        var t = this;
+                        var i = t.dangqianye;
+                        axios
+                            .get('http://localhost:65300/api/XY/AddTool', {
+                                params: {
+                                    ToolName: t.txt_toolName,
+                                    UName: t.txt_uName,
+                                    pageIndex: i,
+                                    pageSize: 2,
+
+                                }
+                            })
+                            .then(function (i) {
+                                t.zongyeshu = i.data.zongyeshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.meiyetiaoshu = i.data.meiyetiaoshu;
+                                t.dangqianye = i.data.dangqianye;
+                                t.zongtiaoshu = i.data.zongtiaoshu;
+
+                                t.message = i.data.masd;
+                            })
+
+                    },
+                    First: function () {
+                        this.dangqianye = 1;
+                        this.Show();
+                    },
+                    Prv: function () {
+                        this.dangqianye--;
+                        if (this.dangqianye < 1) {
+                            this.dangqianye++;
+                        }
+                        this.Show();
+                    },
+                    Next: function () {
+                        this.dangqianye++;
+                        if (this.dangqianye > this.zongyeshu) {
+                            this.dangqianye--;
+                        }
+                        this.Show();
+                    },
+                    Last: function () {
+                        this.dangqianye = this.zongyeshu;
+                        this.Show();
+                    },
+                    ShenHe: function (atId) {
+
+                        var t = this;
+                        axios
+                            .get("http://localhost:65300/api/XY/UpdAT?ATId=" + atId)
+                            .then(function (i) {
+
+                                if (i.data > 0) {
+                                    alert("审核成功");
+                                    location.href = '/XY/ToolShenHe'
+                                }
+
+                                else {
+                                    alert("审核失败");
+                                }
+                            })
+                    }
+
+                }
+
+            })
+    </script>
+}
