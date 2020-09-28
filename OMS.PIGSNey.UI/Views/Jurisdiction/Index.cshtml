@@ -55,14 +55,14 @@
 
             mounted() {
 
-               
+
             },
 
             methods: {
                 Denglu: function () {
                     var t = this;
                     axios
-                        .get("http://localhost:65300/api/Denglu", {
+                        .get("@ViewBag.url/api/Denglu", {
                         params: {
                             name: t.name,
                             pass: t.mima,
@@ -72,7 +72,7 @@
 
                             if (i.data > 0) {
                                 alert("登录成功");
-                                axios.get("http://localhost:65300/api/Session", {
+                                axios.get("@ViewBag.url/api/Session", {
                                     params: {
                                         name: t.name,
                                         pass: t.mima,
@@ -101,7 +101,7 @@
                                 //alert(sessionStorage.getItem("UAccount"));
                                 //alert(sessionStor0age.getItem("UPwd"));
                                 ////alert(sessionStorage.getItem("UState"));
-                                
+
                             }
                             else {
                                 alert("登录失败");

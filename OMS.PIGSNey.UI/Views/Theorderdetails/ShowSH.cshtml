@@ -160,7 +160,7 @@
                     var t = this;
                     var dqy = this.dangqianye;
                     axios
-                        .get('http://localhost:65300/api/UserGetURDSH', {
+                        .get('@ViewBag.url/api/UserGetURDSH', {
                             params: {
                                 UId: 12,
                                 name: t.name,
@@ -184,7 +184,7 @@
                     alert(id);
                     alert(ids);
                     axios
-                        .get("http://localhost:65300/api/ShenHe", {
+                        .get("@ViewBag.url/api/ShenHe", {
                             params:{
                                 UrdId:id,
                                 UId:ids,
@@ -202,7 +202,7 @@
                 },
                 BoHui: function (id, ids) {
                     axios
-                        .get("http://localhost:65300/api/Bohui", {
+                        .get("@ViewBag.url/api/Bohui", {
                             params: {
                                 UrdId: id,
                                 UId: ids,
@@ -221,7 +221,7 @@
                 XQ: function (id) {
                     var t = this
                     axios
-                        .get("http://localhost:65300/api/UserGetFT?UrdId=" + id)
+                        .get("@ViewBag.url/api/UserGetFT?UrdId=" + id)
                         .then(function (i) {
                             t.ddbh = i.data[0].ordernumber,
                                 t.splx = i.data[0].type,

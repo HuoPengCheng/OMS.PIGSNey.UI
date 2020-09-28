@@ -95,7 +95,7 @@
         var rid = sessionStorage.getItem("RId");
         function Menu() {
             $.ajax({
-                url: "http://localhost:65300/api/Moban?rid=" + rid,
+                url: "@ViewBag.url/api/Moban?rid=" + rid,
                 type: "get",
                 dataType: "json",
                 success: function (d) {
@@ -116,11 +116,11 @@
             })
 
 
-          
+
         }
         function Mode(id) {
             $.ajax({
-                url: "http://localhost:65300/api/ej?id=" + id,
+                url: "@ViewBag.url/api/ej?id=" + id,
                 type: "get",
                 dataType: "json",
                 success: function (d) {
@@ -133,6 +133,6 @@
                 }
             })
         }
-     
+
     </script>
 }

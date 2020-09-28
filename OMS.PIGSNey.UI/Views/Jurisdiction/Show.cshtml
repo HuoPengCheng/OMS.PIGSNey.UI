@@ -96,15 +96,15 @@
             methods: {
                 Show: function () {
                     var ch = this;
-                    
+
                     axios
-                        .get("http://localhost:65300/api/PageUserShow", {
+                        .get("@ViewBag.url/api/PageUserShow", {
                             params: {
                                 CurrPage: ch.dangqianye,
                                 Name: ch.name,
                                 sjh: ch.sjh,
                                 zh: ch.zh,
-                                
+
                             }
 
                         })
@@ -144,7 +144,7 @@
                 dong: function (id) {
                     var h = this;
                     if (confirm("确认要冻结嘛")) {
-                        axios.delete("http://localhost:65300/api/gai?id=" + id)
+                        axios.delete("@ViewBag.url/api/gai?id=" + id)
                             .then(function (i) {
                                 h.del = parseInt(i.data);
                                 if (h.del > 0) {
@@ -157,15 +157,15 @@
                                 }
                             })
                     }
-                    
-                          
 
-                 
+
+
+
                 },
                 qi: function (id) {
                     var h = this;
                     if (confirm("确认要启用嘛")) {
-                        axios.delete("http://localhost:65300/api/gai?id=" + id)
+                        axios.delete("@ViewBag.url/api/gai?id=" + id)
                             .then(function (i) {
                                 h.del = parseInt(i.data);
                                 if (h.del > 0) {

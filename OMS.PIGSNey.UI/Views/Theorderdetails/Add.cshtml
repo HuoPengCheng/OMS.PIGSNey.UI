@@ -107,7 +107,7 @@
                 Drop1: function () {
                     var t = this;
                     axios
-                        .get("http://localhost:65300/api/CommodityDetailstbGetType")
+                        .get("@ViewBag.url/api/CommodityDetailstbGetType")
                         .then(function (i) {
                             t.Options = i.data;
                             t.Drop2(t.options);
@@ -123,7 +123,7 @@
                 Drop2: function (id) {
                     var t = this;
                     axios
-                        .get("http://localhost:65300/api/CommodityDetailstbGetMarque?CId=" + id)
+                        .get("@ViewBag.url/api/CommodityDetailstbGetMarque?CId=" + id)
                         .then(function (i) {
                             t.Options1 = i.data;
                         })

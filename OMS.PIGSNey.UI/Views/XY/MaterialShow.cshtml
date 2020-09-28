@@ -185,7 +185,7 @@
                         var n = t.hha;
 
                         axios
-                            .get('http://localhost:65300/api/XY/MaterialShow', {
+                            .get('@ViewBag.url/api/XY/MaterialShow', {
                                 params: {
                                     MaterialName: t.txt_MaterialName,
                                     CId: n,
@@ -230,7 +230,7 @@
                     Xl: function () {
                         var x = this;
                         axios
-                            .get('http://localhost:65300/api/XY/GetCategory')
+                            .get('@ViewBag.url/api/XY/GetCategory')
                             .then(function (i) {
                                 x.OPtions = i.data;
                             })
@@ -238,7 +238,7 @@
                     AddMaterial: function (maId) {
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/GetMAterialById?MAId=" + maId)
+                            .get("@ViewBag.url/api/XY/GetMAterialById?MAId=" + maId)
                             .then(function (i) {
                                 t.materialName = i.data[0].materialName,
                                     t.mSpecification = i.data[0].mSpecification,
@@ -250,7 +250,7 @@
 
                         var Amount = t.MAmount;
                         axios
-                            .get("http://localhost:65300/api/XY/AddMamount", {
+                            .get("@ViewBag.url/api/XY/AddMamount", {
                                 params: {
                                     MAId: this.MAId,
                                     MAmount: Amount,
@@ -271,7 +271,7 @@
                     Use: function (maId) {
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/GetUseMaterial?MAId=" + maId)
+                            .get("@ViewBag.url/api/XY/GetUseMaterial?MAId=" + maId)
                             .then(function (i) {
 
                                 t.mes = i.data;

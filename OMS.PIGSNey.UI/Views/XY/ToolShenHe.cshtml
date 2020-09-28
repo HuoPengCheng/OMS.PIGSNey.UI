@@ -255,7 +255,7 @@
                         var t = this;
                         var i = t.dangqianye;
                         axios
-                            .get('http://localhost:65300/api/XY/AddTool', {
+                            .get('@ViewBag.url/api/XY/AddTool', {
                                 params: {
                                     ToolName: t.txt_toolName,
                                     UName: t.txt_uName,
@@ -278,7 +278,7 @@
                     bo: function () {
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/AddToolBo")
+                            .get("@ViewBag.url/api/XY/AddToolBo")
                             .then(function (i) {
                                  t.mes = i.data;
                             })
@@ -286,7 +286,7 @@
                     Tong: function () {
                         var t = this;
                         axios
-                            .get('http://localhost:65300/api/XY/AddToolTong')
+                            .get('@ViewBag.url/api/XY/AddToolTong')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
@@ -294,16 +294,16 @@
                     Quan: function () {
                         var t = this;
                         axios
-                            .get('http://localhost:65300/api/XY/AddToolAll')
+                            .get('@ViewBag.url/api/XY/AddToolAll')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
                     },
                     bohui: function (atId) {
                         var t = this;
-                       
+
                          axios
-                            .get('http://localhost:65300/api/XY/UpdATBo?atid='+atId)
+                            .get('@ViewBag.url/api/XY/UpdATBo?atid='+atId)
                             .then(function (i) {
                                 if (i.data > 0) {
                                     alert("驳回成功");
@@ -340,7 +340,7 @@
 
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/UpdAT?ATId=" + atId)
+                            .get("@ViewBag.url/api/XY/UpdAT?ATId=" + atId)
                             .then(function (i) {
 
                                 if (i.data > 0) {
