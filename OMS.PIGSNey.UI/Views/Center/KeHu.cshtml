@@ -167,7 +167,7 @@
                     var n = ch.name;
                     var uid = ch.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/KeHu', {
+                        .get('@ViewBag.url/api/Center/KeHu', {
                             params: {
                                 uid: uid,
                                 name: n,
@@ -210,10 +210,10 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/KDel?id=' + id)
+                            .delete('@ViewBag.url/api/Center/KDel?id=' + id)
                             .then(function (i) {
                                 hh.del = parseInt(i.data);
-                                if (hh.del > 0) { 
+                                if (hh.del > 0) {
                                     alert('删除成功！！');
                                     location.href = 'http://localhost:49485/Center/KeHu';
                                 }
@@ -259,7 +259,7 @@
                     var h = this;
                     var uid = h.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/Fan?id=' + uid)
+                        .get('@ViewBag.url/api/Center/Fan?id=' + uid)
                         .then(function (i) {
                             h.uname = i.data[0].uName;
                             h.phone = i.data[0].uPhone;
@@ -271,7 +271,7 @@
                     var phone = $("#sname2").val();
                     var uid = h.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/ZL',
+                        .get('@ViewBag.url/api/Center/ZL',
                             {
                                 params: {
                                     id: uid,
@@ -298,7 +298,7 @@
                     var uid = ch.uid;
                     if (p2 == p3) {
                         axios
-                            .get('http://localhost:65300/api/Center/KeHuPwd', {
+                            .get('@ViewBag.url/api/Center/KeHuPwd', {
                                 params: {
                                     id: uid,
                                     jpwd: p1,
@@ -323,6 +323,6 @@
 
             }
         });
-        
+
     </script>
 }

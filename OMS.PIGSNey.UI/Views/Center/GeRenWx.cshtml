@@ -165,7 +165,7 @@
                     var m = a.meiyetiaoshu
                     var n = a.name;
                     axios
-                        .get('http://localhost:65300/api/Center/GeRenWx', {
+                        .get('@ViewBag.url/api/Center/GeRenWx', {
                             params: {
                                 dangqianye: i,
                                 meiyetiaoshu: m,
@@ -207,7 +207,7 @@
                     var uid = hs.uid;
                     if (confirm('是否修改！！')) {
                         axios
-                            .get('http://localhost:65300/api/Center/ZhuangTai4', {
+                            .get('@ViewBag.url/api/Center/ZhuangTai4', {
                                 params: {
                                     id: id,
                                     uid: 9,
@@ -234,7 +234,7 @@
                 Xl: function () {
                     var x = this;
                     axios
-                        .get('http://localhost:65300/api/XY/GetMaterials')
+                        .get('@ViewBag.url/api/XY/GetMaterials')
                         .then(function (i) {
                             x.option = i.data;
                         })
@@ -242,7 +242,7 @@
                 Xl2: function () {
                     var x = this;
                     axios
-                        .get('http://localhost:65300/api/XY/GetTool')
+                        .get('@ViewBag.url/api/XY/GetTool')
                         .then(function (i) {
                             x.option1 = i.data;
                         })
@@ -254,7 +254,7 @@
                     var uid = b.uid;
                     alert(uid);
                     axios
-                        .get('http://localhost:65300/api/XY/AddAF', {
+                        .get('@ViewBag.url/api/XY/AddAF', {
                             params: {
                                 maid: maid,
                                 MaterialAmount: count,
@@ -276,7 +276,7 @@
                     var tid = a.hah;
                     var uid = a.uid;
                     axios
-                        .get('http://localhost:65300/api/XY/AddAT', {
+                        .get('@ViewBag.url/api/XY/AddAT', {
                             params: {
                                 id: uid,
                                 tid: tid,

@@ -78,7 +78,7 @@
                     var n = ch.name;
                     var uid = ch.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/WeiXui', {
+                        .get('@ViewBag.url/api/Center/WeiXui', {
                             params: {
                                 uid: uid,
                                 name: n,
@@ -121,7 +121,7 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/WeiXui?id=' + id)
+                            .delete('@ViewBag.url/api/Center/WeiXui?id=' + id)
                             .then(function (i) {
                                 hh.del = parseInt(i.data);
                                 if (hh.del > 0) {
@@ -140,9 +140,9 @@
                     var uid = hs.uid;
                     if (confirm('是否接单！！')) {
                         axios
-                            .get('http://localhost:65300/api/Center/ZhuangTai2', {
+                            .get('@ViewBag.url/api/Center/ZhuangTai2', {
                                 params: {
-                                    id: 9,
+                                    id: uid,
                                     id2: ids
                                 }
                             })
@@ -165,12 +165,12 @@
                                 }
                             })
                     }
-                }, 
+                },
                 Add: function (id) {
                     var a = this;
                     var uid = a.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/Add',{
+                        .get('@ViewBag.url/api/Center/Add',{
                             params: {
                                 urdid: id,
                                 uid:uid,
