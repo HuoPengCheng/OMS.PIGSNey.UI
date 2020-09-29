@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Addtimu";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<h1>Addtimu</h1>
+
+<div id="Insert">
+    <table class="table table-bordered">
+        <tr>
+            <td>题目标题:</td>
+            <td><input v-model="txtBiaoti" type="text" /></td>
+        </tr>
+    </table>
+    <table class="table table-bordered">
+        <tr>
+            <td></td>
+            <td><input v-model="txtXx1" type="text" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input v-model="txtXx2" type="text" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input v-model="txtXx3" type="text" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input v-model="txtXx4" type="text" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="Button1" type="button" value="提交" v-on:click="Addtimu(id)" /></td>
+            <td><input id="Button1" type="button" value="重置" v-on:click="Chongzhi()" /></td>
+        </tr>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+       
+        var add1 = new Vue({
+            el: "#Insert",
+            data: {
+                id : this.location.search.split("=")[1],
+                txtBiaoti:"",
+                txtXx1:"",
+                txtXx2:"",
+                txtXx3:"",
+                txtXx4:"",
+            },
+            methods: {
+                Addtimu: function () {
+                    var tm = this;
+                    var biaoti = tm.txtBiaoti;
+                    var nr1 = tm.txtXx1;
+                    var nr2 = tm.txtXx2;
+                    var nr3 = tm.txtXx3;
+                    var nr4 = tm.txtXx4;
+                    //alert(this.id);
+                    //alert(biaoti);
+                    //alert(nr1);
+                    //alert(nr2);
+                    //alert(nr3);
+                    //alert(nr4);
+                    axios
+                        .get('http://localhost:65300/api/Complaints/Addtimu', {
+                            params: {
+                                id:tm.id,
+                                biaoti: biaoti,
+                                xxneirong: nr1,
+                                xxneirong1: nr2,
+                                xxneirong2: nr3,
+                                xxneirong3: nr4,
+                            }
+                        })
+                        .then(function (i) {
+                            tm.a = parseInt(i.data);
+                            if (tm.a > 0) {
+                                alert("添加成功!");
+                                location.href = '/Complaints/Show';
+                            }
+                            else {
+                                alert("添加失败!");
+                                return;
+                            }
+                        })
+                },
+                Chongzhi: function () {
+                    location.href = '/Complaints/Addtimu';
+                }
+            }
+        })
+    </script>
+
+}
+

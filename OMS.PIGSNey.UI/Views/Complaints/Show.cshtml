@@ -29,13 +29,14 @@
                 <td>{{item.shijian}}</td>
                 <th>
                     <input id="Button1" type="button" value="删除" v-on:click="Del(item.wjid)" />
-                    <input id="Button1" type="button" value="问卷预览" v-on:click="Del(item.wjid)" />
-                    <input id="Button1" type="button" value="添加题目" v-on:click="Del(item.wjid)" />
-                    <input id="Button1" type="button" value="调查结果" v-on:click="Del(item.wjid)" />
+                    <input id="Button1" type="button" value="问卷预览" v-on:click="Fantimu(item.wjid)" />
+                    <input id="Button1" type="button" value="添加题目" v-on:click="Add(item.wjid)" />
+                    <input id="Button1" type="button" value="调查结果" v-on:click="Tongji(item.wjid)" />
                 </th>
             </tr>
         </tbody>
     </table>
+    <input id="Button1" type="button" value="添加问卷信息" v-on:click="Addwj()" />
 </div>
 
 <script type="text/javascript">
@@ -59,24 +60,34 @@
                     })
             },
             Del: function (id) {
-                alert(id);
                     if (confirm('确定要删除？')) {
                         axios
                             .delete('http://localhost:65300/api/Complaints/Removewenjuan?id='+id)
                             .then(function (i) {
-                                alert(id);
                                 if (i < 0) {
                                      alert('删除失败！！');
                                     
                                 }
                                 else {
                                     alert('删除成功！！');
-                                    this.Show();
+                                    location.href = '/Complaints/Show';
                                 }
                             })
                     }
                     
-                }
+            },
+            Add: function (id) {
+                location.href = '/Complaints/Addtimu?id=' + id;
+            },
+            Fantimu: function (id) {
+                location.href = '/Complaints/Fantimu?id=' + id;
+            },
+            Tongji: function (id) {
+                location.href = '/Complaints/TongjiShow?id=' + id;
+            },
+            Addwj: function () {
+                location.href = '/Complaints/Addwenjuan';
+            }
         }
     })
 </script>

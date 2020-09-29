@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "UserShow";
+}
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+
+<div id="app">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>问卷信息管理</th>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>名称</td>
+                <td>发布时间</td>
+            </tr>
+        </thead>
+        <tbody v-for="item in emps">
+            <tr>
+                <td><a href="javascript:;" v-on:click="Dati(item.wjid)">{{item.mingcheng}}</a></td>
+                <td>{{item.shijian}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    new Vue({
+        el: "#app",
+        data: {
+            emps: "",
+        },
+        mounted() {
+            this.Show();
+        },
+        methods: {
+            Show: function () {
+                var ch = this;
+                axios
+                    .get('http://localhost:65300/api/Complaints/Getwenjuan')
+                    .then(function (i) {
+                        ch.emps = i.data;
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
+            },
+            Dati: function (id) {
+                location.href = '/Complaints/Fantimu?id=' + id;
+            }
+        }
+    })
+    </script>

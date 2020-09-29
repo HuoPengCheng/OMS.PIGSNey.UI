@@ -12,5 +12,29 @@ namespace OMS.PIGSNey.UI.Controllers
         {
             return View();
         }
+        public IActionResult Addwenjuan()
+        {
+            return View();
+        }
+        public IActionResult Addtimu()
+        {
+            return View();
+        }
+        public IActionResult Fantimu()
+        {
+            return View();
+        }
+        public IActionResult UserShow()
+        {
+            return View();
+        }
+        public IActionResult TongjiShow()
+        {
+            return View();
+        }
+        public IActionResult ASAQW()
+        {
+            return View();
+        }
     }
 }

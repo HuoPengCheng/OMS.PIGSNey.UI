@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewData["Title"] = "TongjiShow";
+}
+
+<script src="~/js/axios.js"></script>
+<script src="~/js/vue.js"></script>
+
+<div id="fan">
+    <table cellspacing="2" cellpadding="2" style="margin-left:420px">
+        <tr>
+            <td><h1>{{mingcheng}}</h1></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:80px">
+        <tr>
+            <td v-if="biaoti1!=null"><h5>1、{{biaoti1}}</h5></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:120px">
+        <tr>
+            <td v-if="xuanxiangneirong11!=null"><input id="Radio1" type="radio" value="xuanxiangneirong11" name="1" /><h7>{{xuanxiangneirong11}}</h7><label style="color:red">({{piaoshu1}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong12!=null"><input id="Radio1" type="radio" value="xuanxiangneirong12" name="1" /><h7>{{xuanxiangneirong12}}</h7><label style="color:red">({{piaoshu2}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong13!=null"><input id="Radio1" type="radio" value="xuanxiangneirong13" name="1" /><h7>{{xuanxiangneirong13}}</h7><label style="color:red">({{piaoshu3}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong14!=null"><input id="Radio1" type="radio" value="xuanxiangneirong14" name="1" /><h7>{{xuanxiangneirong14}}</h7><label style="color:red">({{piaoshu4}})</label></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:80px">
+        <tr>
+            <td v-if="biaoti2!=null"><h5>2、{{biaoti2}}</h5></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:120px">
+        <tr>
+            <td v-if="xuanxiangneirong21!=null"><input id="Radio1" type="radio" value="xuanxiangneirong21" name="2" /><h7>{{xuanxiangneirong21}}</h7><label style="color:red">({{piaoshu5}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong22!=null"><input id="Radio1" type="radio" value="xuanxiangneirong22" name="2" /><h7>{{xuanxiangneirong22}}</h7><label style="color:red">({{piaoshu6}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong23!=null"><input id="Radio1" type="radio" value="xuanxiangneirong23" name="2" /><h7>{{xuanxiangneirong23}}</h7><label style="color:red">({{piaoshu7}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong24!=null"><input id="Radio1" type="radio" value="xuanxiangneirong24" name="2" /><h7>{{xuanxiangneirong24}}</h7><label style="color:red">({{piaoshu8}})</label></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:80px">
+        <tr>
+            <td v-if="biaoti3!=null"><h5>3、{{biaoti3}}</h5></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:120px">
+        <tr>
+            <td v-if="xuanxiangneirong31!=null"><input id="Radio1" type="radio" value="xuanxiangneirong31" name="3" /><h7>{{xuanxiangneirong31}}</h7><label style="color:red">({{piaoshu9}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong32!=null"><input id="Radio1" type="radio" value="xuanxiangneirong32" name="3" /><h7>{{xuanxiangneirong32}}</h7><label style="color:red">({{piaoshu10}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong33!=null"><input id="Radio1" type="radio" value="xuanxiangneirong33" name="3" /><h7>{{xuanxiangneirong33}}</h7><label style="color:red">({{piaoshu11}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong34!=null"><input id="Radio1" type="radio" value="xuanxiangneirong34" name="3" /><h7>{{xuanxiangneirong34}}</h7><label style="color:red">({{piaoshu12}})</label></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:80px">
+        <tr>
+            <td v-if="biaoti4!=null"><h5>4、{{biaoti4}}</h5></td>
+        </tr>
+    </table>
+    <table cellspacing="2" cellpadding="2" style="margin-left:120px">
+        <tr>
+            <td v-if="xuanxiangneirong41!=null"><input id="Radio1" type="radio" value="xuanxiangneirong41" name="4" /><h7>{{xuanxiangneirong41}}</h7><label style="color:red">({{piaoshu13}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong42!=null"><input id="Radio1" type="radio" value="xuanxiangneirong42" name="4" /><h7>{{xuanxiangneirong42}}</h7><label style="color:red">({{piaoshu14}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong43!=null"><input id="Radio1" type="radio" value="xuanxiangneirong43" name="4" /><h7>{{xuanxiangneirong43}}</h7><label style="color:red">({{piaoshu15}})</label></td>
+        </tr>
+        <tr>
+            <td v-if="xuanxiangneirong44!=null"><input id="Radio1" type="radio" value="xuanxiangneirong44" name="4" /><h7>{{xuanxiangneirong44}}</h7><label style="color:red">({{piaoshu16}})</label></td>
+        </tr>
+        <tr>
+            <td><input id="Button1" type="button" value="提交" v-on:click="Add()" /></td>
+        </tr>
+    </table>
+
+</div>
+
+
+@section scripts{
+    <script>
+        var fan = new Vue({
+            el: "#fan",
+            data: {
+                id: this.location.search.split("=")[1],
+                mingcheng: "",
+                biaoti1: "",
+                xuanxiangneirong11: "",
+                xuanxiangneirong12: "",
+                xuanxiangneirong13: "",
+                xuanxiangneirong14: "",
+                piaoshu1: 0,
+                piaoshu2: 0,
+                piaoshu3: 0,
+                piaoshu4:0,
+                biaoti2: "",
+                xuanxiangneirong21: "",
+                xuanxiangneirong22: "",
+                xuanxiangneirong23: "",
+                xuanxiangneirong24: "",
+                piaoshu5: 0,
+                piaoshu6: 0,
+                piaoshu7:0,
+                piaoshu8:0,
+                biaoti3: "",
+                xuanxiangneirong31: "",
+                xuanxiangneirong32: "",
+                xuanxiangneirong33: "",
+                xuanxiangneirong34: "",
+                piaoshu9: 0,
+                piaoshu10: 0,
+                piaoshu11:0,
+                piaoshu12:0,
+                biaoti4: "",
+                xuanxiangneirong41: "",
+                xuanxiangneirong42: "",
+                xuanxiangneirong43: "",
+                xuanxiangneirong44: "",
+                piaoshu13: 0,
+                piaoshu14:0,
+                piaoshu15:0,
+                piaoshu16:0,
+                add1: "",
+                add2: "",
+                add3: "",
+                add4:"",
+
+            },
+            mounted() {
+                this.Fan();
+            },
+            methods: {
+                Fan: function () {
+                    var f = this;
+                    var id = f.id;
+                    axios
+                        .get('http://localhost:65300/api/Complaints/Fan?id=' + id)
+                        .then(function (i) {
+                            f.mingcheng = i.data[0].mingcheng;
+                            f.biaoti1 = i.data[0].biaoti;
+                            f.xuanxiangneirong11 = i.data[0].xuanxiangneirong;
+                            f.xuanxiangneirong12 = i.data[1].xuanxiangneirong;
+                            f.xuanxiangneirong13 = i.data[2].xuanxiangneirong;
+                            f.xuanxiangneirong14 = i.data[3].xuanxiangneirong;
+                            f.piaoshu1 = i.data[0].piaoshu;
+                            f.piaoshu2 = i.data[1].piaoshu;
+                            f.piaoshu3 = i.data[2].piaoshu;
+                            f.piaoshu4 = i.data[3].piaoshu;
+                            f.biaoti2 = i.data[4].biaoti;
+                            f.xuanxiangneirong21 = i.data[4].xuanxiangneirong;
+                            f.xuanxiangneirong22 = i.data[5].xuanxiangneirong;
+                            f.xuanxiangneirong23 = i.data[6].xuanxiangneirong;
+                            f.xuanxiangneirong24 = i.data[7].xuanxiangneirong;
+                            f.piaoshu5 = i.data[4].piaoshu;
+                            f.piaoshu6 = i.data[5].piaoshu;
+                            f.piaoshu7 = i.data[6].piaoshu;
+                            f.piaoshu8 = i.data[7].piaoshu;
+                            f.biaoti3 = i.data[8].biaoti;
+                            f.xuanxiangneirong31 = i.data[8].xuanxiangneirong;
+                            f.xuanxiangneirong32 = i.data[9].xuanxiangneirong;
+                            f.xuanxiangneirong33 = i.data[10].xuanxiangneirong;
+                            f.xuanxiangneirong34 = i.data[11].xuanxiangneirong;
+                            f.piaoshu9 = i.data[8].piaoshu;
+                            f.piaoshu10 = i.data[9].piaoshu;
+                            f.piaoshu11 = i.data[10].piaoshu;
+                            f.piaoshu12 = i.data[11].piaoshu;
+                            f.biaoti4 = i.data[12].biaoti;
+                            f.xuanxiangneirong41 = i.data[12].xuanxiangneirong;
+                            f.xuanxiangneirong42 = i.data[13].xuanxiangneirong;
+                            f.xuanxiangneirong43 = i.data[14].xuanxiangneirong;
+                            f.xuanxiangneirong44 = i.data[15].xuanxiangneirong;
+                            f.piaoshu13 = i.data[12].piaoshu;
+                            f.piaoshu14 = i.data[13].piaoshu;
+                            f.piaoshu15 = i.data[14].piaoshu;
+                            f.piaoshu16 = i.data[15].piaoshu;
+                        })
+                }
+
+            }
+        })
+
+    </script>
+}
+

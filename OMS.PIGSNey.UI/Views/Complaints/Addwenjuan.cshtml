@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Addwenjuan";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<div id="Insert">
+
+    <table>
+        <tr>
+            <td>名称:</td>
+            <td><input v-model="txtName" type="text" /></td>
+        </tr>
+        <tr>
+            <td><input id="Button1" type="button" value="提交" v-on:click="AddWenjuan()" /></td>
+            <td><input id="Button1" type="button" value="重置" v-on:click="Chongzhi()" /></td>
+        </tr>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        var add = new Vue({
+            el: "#Insert",
+            data: {
+                txtName:"",
+            },
+            methods: {
+                AddWenjuan: function () {
+                    var sh = this;
+                    var name = sh.txtName;
+                    alert(name);
+                    axios
+                        .get('http://localhost:65300/api/Complaints/Addwenjuan', {
+                            params: {
+                                mingcheng: name,
+                            }
+                        })
+                        .then(function (i) {
+                            sh.a = parseInt(i.data);
+                            if (sh.a > 0) {
+                                alert("添加成功!");
+                                location.href = '/Complaints/Show';
+                            }
+                            else {
+                                alert("添加失败");
+                                return;
+                            }
+                        })
+                },
+                Chongzhi: function () {
+                    location.href = '/Complaints/Addwenjuan';
+                }
+            }
+        })
+
+    </script>
+}
