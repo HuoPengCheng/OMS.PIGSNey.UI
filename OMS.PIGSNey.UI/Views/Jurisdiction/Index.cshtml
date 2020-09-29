@@ -56,7 +56,6 @@
                 Denglu: function () {
                     var t = this;
                     var name = t.name;
-                    alert(name);
                     axios
                         .get("http://localhost:65300/api/Denglu", {
                             params: {
@@ -104,6 +103,7 @@
                             sessionStorage.setItem("UPhone", t.uPhone);
                             sessionStorage.setItem("UState", t.uState);
                         });
+                   
                     ////alert(sessionStorage.getItem("UName"));
                     //alert(sessionStorage.getItem("UAccount"));
                     //alert(sessionStor0age.getItem("UPwd"));
