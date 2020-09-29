@@ -1,19 +1,22 @@
 ﻿
 @{
     ViewData["Title"] = "Show";
+    //Layout = null;
 }
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
-<script src="~/static/admin/layui/layui.js"></script>
+
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
 <h1>Show</h1>
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
 
 <div id="app">
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <tr>
             <td>开始日期</td>
             <td><input id="Text1" type="date" v-model="st" class="form-control" /></td>
@@ -22,10 +25,21 @@
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
             <td><input id="Text1" type="text" v-model="name" lay-verify="required" class="layui-input" placeholder="根据商品订单查询" /></td>
             <td>
-                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show">查询</button>
+                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show"><i class="layui-icon layui-icon-search"></i></button>
             </td>
-            <td>
-                <img src="/TheorderdetailsImg/QQ图片20200924143148.png" data-toggle="modal" data-target="#UseMaterial" title="查看回访消息" v-on:click="XX()" style="width:42px;height:35px" alt="" />
+            <td v-if="Prompttb==0">
+                <button type="button" class="layui-btn layui-btn-primary" data-toggle="modal" data-target="#UseMaterial" title="查看新回访消息" v-on:click="XX()">
+                    <i>
+                        <img style="width:45px;height:33px" src="~/TheorderdetailsImg/QQ图片20200924143148.png" />
+                    </i>
+                </button>
+            </td>
+            <td v-if="Prompttb>0">
+                <button type="button" class="layui-btn layui-btn-primary" data-toggle="modal" data-target="#UseMaterial" title="查看回访消息" v-on:click="XX()">
+                    <i>
+                        <img style="width:45px;height:33px" src="~/TheorderdetailsImg/QQ图片202009241431481.png" />
+                    </i>
+                </button>
             </td>
         </tr>
     </table>
@@ -36,6 +50,7 @@
                 <td>商品类型</td>
                 <td>商品型号</td>
                 <td>维修等级</td>
+                <td>图片</td>
                 <td>维修理由</td>
                 <td>维修原因</td>
                 <td>  地址  </td>
@@ -53,19 +68,37 @@
                 <td>
                     {{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}
                 </td>
+                <td>
+                    <img v-bind:src="i.img" class="img-box4" width="80" height="50">
+                </td>
                 <td>{{i.cause}}</td>
                 <td>{{i.reason}}</td>
                 <td>{{i.address}}</td>
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
                 <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
-                <td v-if="i.state==0||i.state==1||i.state==2"><input id="Button1" type="button" class="btn btn-danger" value="取消订单" v-on:click="Del(i.urdId)" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
-                <td v-if="i.state==3"><input id="Button1" type="button" class="btn btn-danger" value="意见回复" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
-                <td v-if="i.state==-1"><input id="Button1" type="button" class="btn btn-danger" value="再次申请" /> <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" /></td>
+                <td v-if="i.state==0||i.state==1||i.state==2">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" title="取消订单" v-on:click="Del(i.urdId)"><i class="layui-icon layui-icon-delete"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                    </div>
+                </td>
+                <td v-if="i.state==3">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" title="反馈信息"><i class="layui-icon layui-icon-service"></i></button>&nbsp;
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                    </div>
+                </td>
+                <td v-if="i.state==-1">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" v-on:click="Add()" title="再次申请"><i class="layui-icon layui-icon-refresh-3"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
@@ -76,6 +109,88 @@
             <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Last" value="尾页" /></td>
         </tr>
     </table>
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">订单编号:</label>
+                            <label for="inputEmail3">{{ddbh}}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">商品类型:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{splx}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">商品型号:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{spxh}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修等级:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxdj==1?"日常":wxdj==2? "应急":"紧急"}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修原因:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxyy}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">  地址:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{dz}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">详细地址:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{xxdz}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">申请日期:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{sqrq}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修状态:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxzt==0?"待审核":wxzt==1?"待维修":wxzt==2?"维修中":"已完成"}}</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="UseMaterial" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">显示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg" v-for="item in response">
+                            <tr>
+                                <td>尊敬的{{item.uName}}用户您好!!  您的订单{{item.ordernumber}} 于{{item.promptTime}} 返回消息:{{item.promptContent}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
@@ -84,6 +199,7 @@
         var app = new Vue({
             el: '#app',
             data: {
+                Prompttb: 0,
                 emps: '',
                 response: '',
                 dangqianye: 1,
@@ -103,16 +219,32 @@
                 wxzt: ""
             },
             mounted() {
+
+                this.PrompttbShow();
                 this.Show();
             },
             methods: {
+                PrompttbShow: function () {
+                    var t = this;
+                    axios
+                        .get('http://localhost:65300/api/PrompttbShow', {
+                            params: {
+                                UId: 12,
+                            }
+                        })
+                        .then(function (i) {
+                            t.Prompttb = i.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
                 Show: function () {
                     var t = this;
                     var dqy = this.dangqianye;
                     axios
                         .get('@ViewBag.url/api/UserGetURD', {
                             params: {
-                                UId: 12,
+                                UId: 11,
                                 name: t.name,
                                 strTime: t.st,
                                 endTime: t.et,
@@ -130,6 +262,9 @@
                             console.log(error);
                         });
                 },
+                Add: function () {
+                    location.href ="/Theorderdetails/ReAdd"
+                },
                 XQ: function (id) {
                     var t = this
                     axios
@@ -143,8 +278,7 @@
                                 t.dz = i.data[0].address,
                                 t.xxdz = i.data[0].detailedAddress,
                                 t.sqrq = i.data[0].date,
-                                t.wxzt = i.data[0].state,
-                                t.name = i.data[0].ordernumber
+                                t.wxzt = i.data[0].state
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -156,6 +290,7 @@
                         .get("@ViewBag.url/api/GetResponse?UId=" + 12)
                         .then(function (i) {
                             t.response = i.data;
+                            t.Show();
                         }).catch(function (error) {
                             console.log(error);
                         });
