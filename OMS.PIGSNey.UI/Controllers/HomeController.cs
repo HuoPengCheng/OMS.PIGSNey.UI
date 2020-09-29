@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OMS.PIGSNey.UI.Models;
 
@@ -12,7 +13,13 @@ namespace OMS.PIGSNey.UI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _iconfiguration;
 
+        public HomeController(IConfiguration configuration)
+        {
+            this._iconfiguration = configuration;
+        }
+         
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

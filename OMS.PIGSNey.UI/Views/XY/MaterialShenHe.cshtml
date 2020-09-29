@@ -261,7 +261,7 @@
                         var t = this;
                         var i = t.dangqianye;
                         axios
-                            .get('http://localhost:65300/api/XY/ApplyFortbShow', {
+                            .get('@ViewBag.url/api/XY/ApplyFortbShow', {
                                 params: {
                                     MaterialName: t.txt_materialName,
                                     UName: t.txt_uName,
@@ -284,7 +284,7 @@
                     BoHui: function () {
                         var t = this;
                         axios
-                            .get('http://localhost:65300/api/XY/ApplyFortbShowBO')
+                            .get(@ViewBag.url/api/XY/ApplyFortbShowBO')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
@@ -292,7 +292,7 @@
                     Tong: function () {
                         var t = this;
                         axios
-                            .get('http://localhost:65300/api/XY/ApplyFortbShowTong')
+                            .get('@ViewBag.url/api/XY/ApplyFortbShowTong')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
@@ -300,7 +300,7 @@
                     Quan: function () {
                         var t = this;
                         axios
-                            .get('http://localhost:65300/api/XY/ApplyFortbShowAll')
+                            .get('@ViewBag.url/api/XY/ApplyFortbShowAll')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
@@ -331,7 +331,7 @@
 
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/UpdAf", {
+                            .get("@ViewBag.url/api/XY/UpdAf", {
                                 params: {
                                     AId: aId,
                                     MAId: maId,
@@ -356,7 +356,7 @@
                     ShenHeBo: function (aId) {
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/UpdAfBO?aid=" + aId)
+                            .get("@ViewBag.url/api/XY/UpdAfBO?aid=" + aId)
                             .then(function (i) {
                                 if (i.data > 0) {
                                     alert("驳回成功");

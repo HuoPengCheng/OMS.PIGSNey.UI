@@ -110,7 +110,7 @@
                     var t = this;
                     var dqy = this.dangqianye;
                     axios
-                        .get('http://localhost:65300/api/UserGetURD', {
+                        .get('@ViewBag.url/api/UserGetURD', {
                             params: {
                                 UId: 12,
                                 name: t.name,
@@ -133,7 +133,7 @@
                 XQ: function (id) {
                     var t = this
                     axios
-                        .get("http://localhost:65300/api/UserGetFT?UrdId=" + id)
+                        .get("@ViewBag.url/api/UserGetFT?UrdId=" + id)
                         .then(function (i) {
                             t.ddbh = i.data[0].ordernumber,
                                 t.splx = i.data[0].type,
@@ -153,7 +153,7 @@
                     alert("查看消息");
                     var t = this
                     axios
-                        .get("http://localhost:65300/api/GetResponse?UId=" + 12)
+                        .get("@ViewBag.url/api/GetResponse?UId=" + 12)
                         .then(function (i) {
                             t.response = i.data;
                         }).catch(function (error) {
@@ -164,7 +164,7 @@
                     var t = this
                     if (confirm("是否取消订单")) {
                         axios
-                            .get("http://localhost:65300/api/UserDelURD?UrdId=" + id)
+                            .get("@ViewBag.url/api/UserDelURD?UrdId=" + id)
                             .then(function (i) {
                                 if (i.data > 0) {
                                     alert("取消成功");
@@ -200,7 +200,7 @@
                     this.dangqianye = this.zongyeshu;
                     this.Show();
                 },
-                        
+
             }
         })
     </script>

@@ -122,7 +122,7 @@
                         var t = this;
                         var i = t.dangqianye;
                         axios
-                            .get('http://localhost:65300/api/XY/ToolShow', {
+                            .get('@ViewBag.url/api/XY/ToolShow', {
                                 params: {
                                     ToolName: t.txt_ToolName,
                                     pageIndex: i,
@@ -166,7 +166,7 @@
                     Use: function (TId) {
                         var t = this;
                         axios
-                            .get("http://localhost:65300/api/XY/GetUseTool?TId=" + TId)
+                            .get("@ViewBag.url/api/XY/GetUseTool?TId=" + TId)
                             .then(function (i) {
 
                                 t.mes = i.data;
