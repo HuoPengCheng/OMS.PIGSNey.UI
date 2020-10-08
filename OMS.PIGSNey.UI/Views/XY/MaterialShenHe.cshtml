@@ -10,8 +10,6 @@
 <script src="~/js/axios.js"></script>
 <link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
 <script src="~/layui-v2.5.6/layui/layui.all.js"></script>
-
-
 <div id="app">
     材料名称：<input v-model="txt_materialName" type="text" />
     申请人：<input v-model="txt_uName" type="text" />
@@ -284,7 +282,7 @@
                     BoHui: function () {
                         var t = this;
                         axios
-                            .get(@ViewBag.url/api/XY/ApplyFortbShowBO')
+                            .get('@ViewBag.url/api/XY/ApplyFortbShowBO')
                             .then(function (i) {
                                 t.mes = i.data;
                             })
