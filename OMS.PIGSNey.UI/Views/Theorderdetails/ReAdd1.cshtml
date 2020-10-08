@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewData["Title"] = "ReAdd1";
+}
+
+<h1>ReAdd1</h1>
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<script src="~/js/area.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+<div id="app">
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>订单编号：</td>
+            <td><label for="inputEmail3">{{ddbh}}</label></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+
+        <tr>
+            <td>投诉人：</td>
+            <td><label for="inputEmail3">{{tsr}}</label></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+
+        <tr>
+            <td>被投诉人：</td>
+            <td><label for="inputEmail3">{{bwxr}}</label></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+
+        <tr>
+            <td>投诉内容：</td>
+            <td> <textarea id="TextArea1" rows="2" v-Model="tsnr" cols="20"></textarea></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>发送图片</td>
+            <td>
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        预览图：
+                        <div class="layui-upload-list" id="demo2"></div>
+                    </blockquote>
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+
+        <tr>
+            <td colspan="4">
+                <button type="button" class="layui-btn layui-btn-normal" v-on:click="Add()"><i class="layui-icon layui-icon-upload">提交</i></button>
+            </td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+    <script>
+        var id = this.location.search.split("=")[1];
+        alert(id);
+        var app = new Vue({
+            el: "#app",
+            data: {
+                ddbh:'',
+                tsr:'',
+                bwxr:'',
+                tsnr:''
+            },
+            mounted() {
+                this.Ft();
+            },
+            methods: {
+                Ft: function () {
+                    var t = this;
+                    axios
+                        .get("@ViewBag.url/api/GetFt?UrdId=" + id)
+                        .then(function (i) {
+                                t.ddbh = i.data[0].ordernumber,
+                                t.tsr = "李四",
+                                t.bwxr = i.data[0].uName
+                        })
+                        //.then(reponseData => {
+                        //    t.Options = reponseData.data;
+                        //    this.Drop2(t.options);
+                        //})
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+                },
+                Add: function () {
+                    var img = i;
+                    var t = this;
+                    axios
+                        .get("http://localhost:65300/api/AddComplaintb", {
+                            params: {
+                                Ordernumber: t.ddbh,
+                                UName1: t.tsr,
+                                UName2: t.bwxr,
+                                Comment: t.tsnr,
+                                Img: img
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("添加成功");
+                            }
+                            else {
+                                alert("添加失败");
+                            }
+                        })
+                }
+            }
+        })
+    </script>
+    <script>
+        var i = "";
+        layui.use('upload', function () {
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            //多图片上传
+            upload.render({
+                elem: '#test2'
+                , url: 'https://httpbin.org/post' //改成您自己的上传接口
+                , multiple: true
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo2').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">')
+                        i = file.name;
+                        alert(i);
+                    });
+                }
+                , done: function (res) {
+                    //上传完毕
+                }
+            });
+
+            //绑定原始文件域
+            upload.render({
+                elem: '#test20'
+                , url: 'https://httpbin.org/post' //改成您自己的上传接口
+                , done: function (res) {
+                    layer.msg('上传成功');
+                    console.log(res)
+                }
+            });
+
+        });
+    </script>
+
+}
+
+

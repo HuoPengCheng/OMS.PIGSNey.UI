@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewData["Title"] = "GetTouSu";
+}
+
+<h1>GetTouSu</h1>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <table cellspacing=0 cellpadding=1 width="100%" border="0">
+        <tr>
+            <th bgcolor=#999 style="text-align:center">
+
+                <p><a href="http:" target="_blank"></a>
+                <p>
+                    <h1>投诉信息</h1>
+                </p>
+            </th>
+        </tr>
+    </table>
+    <table class="table  table-bordered">
+        <thead>
+            <tr>
+                <td>投诉工单号</td>
+                <td>投诉人</td>
+                <td>被投诉人</td>
+                <td>评论</td>
+                <td>照片</td>
+                <td>状态</td>
+
+            </tr>
+        </thead>
+        <tbody id="tb">
+        </tbody>
+    </table>
+    <div>
+        <table class="layui-table" lay-even="" lay-skin="nob">
+            <tr>
+                <td> 当前页：<span id="dqy"></span></td>
+                <td> 总页数：<span id="zys"></span></td>
+                <td> 总记录数：<span id="zjls"></span></td>
+                <td><input id="Button1" type="button" class="btn btn-group" onclick="TouSuShow(1)" value="首页" /></td>
+                <td><input id="Button1" type="button" class="btn btn-group" onclick="TouSuShow(currpage-1)" value="上一页" /></td>
+                <td><input id="Button1" type="button" class="btn btn-group" onclick="TouSuShow(currpage+1)" value="下一页" /></td>
+                <td><input id=" " type="button" class="btn btn-group" onclick="TouSuShow(totalpage)" value="尾页" /></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    var totalcount = 0;
+    var totalpage = 0;
+    var currpage = 0;
+    //文档就绪函数
+    $(function () {
+        TouSuShow(1);
+    })
+    //员工与部门显示功能
+    function TouSuShow(page) {
+        $.ajax({
+            url: 'http://localhost:65300/api/ShuJuBaoBiao/GetTouSu',
+            data: { PageSize: 5, CurrPage: page },
+            dataType: "json",
+            type: "get",
+            success: function (d) {
+                $("#tb").empty();
+                $(d.masd).each(function () {
+                    var str = '';
+                    str += '<tr>'
+                        + '<td>' + this.ordernumber + '</td>'
+                        + '<td>' + this.uName1 + '</td>'
+                        + '<td>' + this.uName2 + '</td>'
+                        + '<td>' + this.comment + '</td>'
+                        + '<td><img src="~' + this.img + '" /></td >'
+                    if (this.state == 0) {
+                        str += '<td><input id="Button1" type="button" value="通过" onclick="OK(' + this.coId + ')"  class="btn btn-group" /><input id="Button1" class="btn btn-group" type="button" onclick="NO(' + this.coId + ')" value="驳回" /></td>';
+                    }
+                    else if (this.state == 1) {
+                         str += '<td>已通过</td>';
+                    }
+                    else {
+                        str += '<td>驳回</td>';
+                    }
+                    str += '</tr>';
+                    $("#tb").append(str);
+                });
+                  totalcount = d.zongtiaoshu;
+                totalpage = d.zongyeshu;
+                currpage = d.dangqianye;
+                $("#dqy").html(d.dangqianye);
+                $("#zys").html(d.zongyeshu);
+                $("#zjls").html(d.zongtiaoshu);
+            }
+        })
+    }
+
+    function OK(a) {
+        alert(a);
+        $.ajax({
+            url: "http://localhost:65300/api/ShuJuBaoBiao/UpDateOK",
+            data: { CoId: a },
+            type: "get",
+            dataType: "json",
+            success: function (d) {
+                if (d>0) {
+                    alert("审核通过");
+                    TouSuShow();
+                    
+                }
+                else {
+                    alert("审核失败");
+                }
+            }
+        })
+    }
+    function NO(a) {
+        alert(a);
+        $.ajax({
+            url: "http://localhost:65300/api/ShuJuBaoBiao/UpDateNO",
+            data: { CoId: a },
+            type: "get",
+            dataType: "json",
+            success: function (d) {
+                if (d>0) {
+                    alert("驳回成功");
+                    TouSuShow();
+                }
+                else {
+                    alert("驳回失败");
+                }
+            }
+        })
+    }
+    ////删除
+    function Del(id) {
+        $.ajax({
+            url: "http://localhost:58646/api/staff/Del",
+            data: { id: id },
+            dataType: "json",
+            type: "get",
+            success: function (d) {
+                if (confirm("确认删除离职员工吗")) {
+                    alert("删除成功");
+                    EmpShow(1);
+                } else {
+                    alert("删除失败");
+                }
+            }
+        })
+    }
+</script>

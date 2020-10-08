@@ -36,5 +36,13 @@ namespace OMS.PIGSNey.UI.Controllers
             return View();
         }
 
+        public IActionResult ReAdd1()
+        {
+            string url = _configuration["apiUrl"];
+            ViewBag.url = url;
+            return View();
+        }
+
+
     }
 }

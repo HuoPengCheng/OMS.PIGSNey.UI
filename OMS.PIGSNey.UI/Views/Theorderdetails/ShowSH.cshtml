@@ -60,7 +60,7 @@
                         <button type="button" class="layui-btn layui-btn-sm" title="审核" v-on:click="ShenHe(i.urdId,i.uId)"><i class="layui-icon layui-icon-add-circle"></i></button>
                         <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="驳回" v-on:click="BoHui(i.urdId,i.uId)"><i class="layui-icon layui-icon-reduce-circle"></i></button>
                     </div>
-                </td>
+                   </td>
                 <td v-if="i.state!=0">{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
                 <td>
                     <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
