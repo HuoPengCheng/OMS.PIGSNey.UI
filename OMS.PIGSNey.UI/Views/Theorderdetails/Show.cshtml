@@ -77,22 +77,32 @@
                 <td>{{i.detailedAddress}}</td>
                 <td>{{i.date}}</td>
                 <td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
-                <td v-if="i.state==0||i.state==1||i.state==2">
+                <td v-if="i.state==0">
                     <div class="layui-btn-group">
                         <button type="button" class="layui-btn layui-btn-sm" title="取消订单" v-on:click="Del(i.urdId)"><i class="layui-icon layui-icon-delete"></i></button>
                         <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                        
+                    </div>
+                </td>
+                <td v-if="i.state==1||i.state==2">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" title="取消订单" v-on:click="Del(i.urdId)"><i class="layui-icon layui-icon-delete"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="投诉" v-on:click="TS(i.urdId)"><i class="layui-icon layui-icon-tread"></i></button>
                     </div>
                 </td>
                 <td v-if="i.state==3">
                     <div class="layui-btn-group">
                         <button type="button" class="layui-btn layui-btn-sm" title="反馈信息"><i class="layui-icon layui-icon-service"></i></button>&nbsp;
                         <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="投诉" v-on:click="TS(i.urdId)"><i class="layui-icon layui-icon-tread"></i></button>
                     </div>
                 </td>
                 <td v-if="i.state==-1">
                     <div class="layui-btn-group">
                         <button type="button" class="layui-btn layui-btn-sm" v-on:click="Add()" title="再次申请"><i class="layui-icon layui-icon-refresh-3"></i></button>
                         <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="投诉" v-on:click="TS(i.urdId)"><i class="layui-icon layui-icon-tread"></i></button>
                     </div>
                 </td>
             </tr>
@@ -178,10 +188,10 @@
                         <h4 class="modal-title">显示</h4>
                     </div>
                     <div class="modal-body">
-                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg" v-for="item in response">
-                            <tr>
-                                <td>尊敬的{{item.uName}}用户您好!!  您的订单{{item.ordernumber}} 于{{item.promptTime}} 返回消息:{{item.promptContent}}</td>
-                            </tr>
+                      <table class="layui-table" lay-even lay-skin="line" lay-size="lg"  v-for="item in response">
+                                <tr>
+                                    <td>尊敬的{{item.uName}}用户您好!!  您的订单{{item.ordernumber}} 于{{item.promptTime}} 返回消息:{{item.promptContent}}</td>
+                                </tr>
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -244,7 +254,7 @@
                     axios
                         .get('@ViewBag.url/api/UserGetURD', {
                             params: {
-                                UId: 11,
+                                UId: 12,
                                 name: t.name,
                                 strTime: t.st,
                                 endTime: t.et,
@@ -282,6 +292,9 @@
                         }).catch(function (error) {
                             console.log(error);
                         });
+                },
+                TS: function (id) {
+                    location.href = "/Theorderdetails/ReAdd1?Id=" + id;
                 },
                 XX: function () {
                     alert("查看消息");

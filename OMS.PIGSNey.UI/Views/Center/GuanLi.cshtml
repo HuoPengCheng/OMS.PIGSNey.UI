@@ -7,10 +7,14 @@
 <link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
 <link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <div id="app">
-    <h1>登陆人：{{uanme1}}</h1>
-    <h3>账  号：{{uaccount}}</h3>
-    <h3>手机号：{{uphone}}</h3>
-    <h3>名  称：{{uanme1}}</h3>
+
+    <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+        <tr>
+            <td>登陆人：{{uname1}}</td>
+            <td>账  号：{{uaccount}}</td>
+            <td>手机号：{{uphone}}</td>
+        </tr>
+    </table>
     <br />
     <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan" />
     <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
