@@ -46,7 +46,7 @@ namespace OMS.PIGSNey.UI
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Jurisdiction}/{action=Index}/{id?}");
             });
         }
     }

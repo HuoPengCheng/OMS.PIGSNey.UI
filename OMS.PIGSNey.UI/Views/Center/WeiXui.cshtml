@@ -4,22 +4,20 @@
 }
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
-<h1>WeiXui</h1>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
 <div id="app">
     <table class="table table-bordered">
         <tr>
             <td>类型</td>
-            <td><input id="name" v-model="name" type="text" /></td>
-            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" /></td>
-            <td><input id="Button1" type="button" value="修改密码" v-on:click="Show" /></td>
+            <td><input type="password" v-model="name" id="sname" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+            <td><input id="Button1" type="button" value="搜索" v-on:click="Show" class="layui-btn layui-btn-sm" /></td>
+
         </tr>
     </table>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <td>姓名</td>
-                <td>账号</td>
-                <td>手机号</td>
                 <td>类型</td>
                 <td>型号</td>
                 <td>理由</td>
@@ -29,29 +27,12 @@
         </thead>
         <tbody v-for="item in message">
             <tr>
-                <td>{{item.uName}}</td>
-                <td>{{item.uAccount}}</td>
-                <td>{{item.uPhone}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.marque}}</td>
                 <td>{{item.reason}}</td>
-                <td>{{item.state==1?"待处理":item.state==2? "维修中": item.state==3? "完成":"已被冻结"}}</td>
-                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" /></td>
-                <td v-if="item.state==2"><input id="Button1" type="button" value="完成" v-on:click="Gai2(item.urdId)" /></td>
-
-                @*if({{item.state==1}}==1)
-          {
-          <td><input id="Button1" type="button" value="接单" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==2}}==2)
-          {
-          <td><input id="Button1" type="button" value="完成" v-on:click="Gai(item.urdId)" /></td>
-          }
-        if({{item.state==3}}==3)
-          {
-          <td><input id="Button1" type="button" value="删除" v-on:click="Gai(item.urdId)" /></td>
-          }*@
-            </tr>
+                <td>{{item.state==1?"待接单":"待接单"}}</td>
+                <td v-if="item.state==1"><input id="Button1" type="button" value="接单" v-on:click="Gai1(item.urdId)" class="layui-btn layui-btn-normal " /></td>
+                </tr>
         </tbody>
     </table>
     <table class="table table-bordered">
@@ -70,6 +51,7 @@
             <td><input id="Button1" type="button" value="尾页" v-on:click="Last" class="layui-btn layui-btn-sm" /></td>
         </tr>
     </table>
+
 </div>
 @section scripts{
     <script>
@@ -77,13 +59,13 @@
             el: "#app",
             data: {
                 message: "",
-                meiyetiaoshu: 2,
+                meiyetiaoshu: 5,
                 dangqianye: 1,
                 zongyeshu: 1,
                 zongtiaoshu: 1,
-                del: 0,
                 name: "",
-
+                uid: sessionStorage.getItem("UId"),
+                uname1: sessionStorage.getItem("UName"),
             },
             mounted() {
                 this.Show();
@@ -94,10 +76,11 @@
                     var i = ch.dangqianye;
                     var m = ch.meiyetiaoshu
                     var n = ch.name;
+                    var uid = ch.uid;
                     axios
-                        .get('http://localhost:65300/api/Center/WeiXui', {
+                        .get('@ViewBag.url/api/Center/WeiXui', {
                             params: {
-                                uid: 9,
+                                uid: uid,
                                 name: n,
                                 dangqianye: i,
                                 meiyetiaoshu: m
@@ -138,7 +121,7 @@
                     var hh = this;
                     if (confirm('确认删除？')) {
                         axios
-                            .delete('http://localhost:65300/api/Center/WeiXui?id=' + id)
+                            .delete('@ViewBag.url/api/Center/WeiXui?id=' + id)
                             .then(function (i) {
                                 hh.del = parseInt(i.data);
                                 if (hh.del > 0) {
@@ -150,67 +133,59 @@
                                 }
                             })
                     }
-
                 },
-                Gai: function (id) {
+                Gai1: function (id) {
                     var hs = this;
                     var ids = id;
-                    var ids2 = 9;
-                    if (confirm('是否修改！！')) {
+                    var uid = hs.uid;
+                    if (confirm('是否接单！！')) {
                         axios
-                            .get('http://localhost:65300/api/Center/ZhuangTai2', {
+                            .get('@ViewBag.url/api/Center/ZhuangTai2', {
                                 params: {
-                                    id: ids2,
+                                    id: uid,
                                     id2: ids
                                 }
-
                             })
-                            .then(function (i) {
+                            .then(i=>{
                                 hs.update1 = parseInt(i.data);
                                 hs.update2 = parseInt(i.data);
                                 if (hs.update1 > 0) {
                                     if (hs.update2 > 0) {
-                                        alert('修改成功！！');
+                                        alert('接单成功！！');
+                                        this.Add(ids);
+                                        location.href = 'http://localhost:49485/Center/Weixui';
+                                        location.href = 'http://localhost:49485/Center/GeRenWx';
                                     }
                                     else {
-                                        alert('修改失败！！');
+                                        alert('接单失败！！');
                                     }
                                 }
                                 else {
-                                    alert('修改失败！！');
+                                    alert('接单失败！！');
                                 }
                             })
                     }
                 },
-                Gai2: function (id) {
-                    var hs = this;
-                    alert(id);
-                    if (confirm('是否修改！！')) {
-                        axios
-                            .get('http://localhost:65300/api/Center/ZhuangTai4', {
-                                params: {
-                                    id: id
-                                }
-
-                            })
-                            .then(function (i) {
-                                hs.update1 = parseInt(i.data);
-                                hs.update2 = parseInt(i.data);
-                                if (hs.update1 > 0) {
-                                    if (hs.update2 > 0) {
-                                        alert('修改成功！！');
-                                    }
-                                    else { 
-                                        alert('修改失败！！');
-                                    }
-                                }
-                                else {
-                                    alert('修改失败！！');
-                                }
-                            })
-                    }
+                Add: function (id) {
+                    var a = this;
+                    var uid = a.uid;
+                    axios
+                        .get('@ViewBag.url/api/Center/Add',{
+                            params: {
+                                urdid: id,
+                                uid:uid,
+                            }
+                        })
+                        .then(function (i) {
+                            a.c = parseInt(i.data);
+                            if (a.c > 0) {
+                                alert('添加成功！！');
+                            }
+                            else {
+                                alert('添加失败！！');
+                            }
+                        })
                 }
-
             }
         });
     </script>

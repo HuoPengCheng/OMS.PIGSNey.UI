@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewData["Title"] = "GuanLi";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/static/admin/layui/css/layui.css" rel="stylesheet" />
+<link href="~/static/admin/css/admin.css" rel="stylesheet" />
+<div id="app">
+    <h1>登陆人：{{uanme1}}</h1>
+    <h3>账  号：{{uaccount}}</h3>
+    <h3>手机号：{{uphone}}</h3>
+    <h3>名  称：{{uanme1}}</h3>
+    <br />
+    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="编辑资料" v-on:click="Fan" />
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">编辑资料</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>名称：</td>
+                                <td><input type="text" id="sname1" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>手机号：</td>
+                                <td><input type="text" id="sname2" required lay-verify="required" autocomplete="off" class="layui-input" style="width:200px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="XuiGai">
+                            完成
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <input class="layui-btn layui-btn-radius layui-btn-normal" id="Button1" data-toggle="modal" data-target="#addClass1" type="button" value="修改密码" />
+    <div class="modal fade" id="addClass1" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="layui-table" lay-even lay-skin="line" lay-size="lg">
+                            <tr>
+                                <td>请输入旧密码：</td>
+                                <td><input type="password" v-model="jpwd" id="sname" required lay-verify="required" placeholder="请输入旧密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>请输入新密码：</td>
+                                <td><input type="password" v-model="xpwd1" id="sname" required lay-verify="required" placeholder="请输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+                            <tr>
+                                <td>再次输入新密码：</td>
+                                <td><input type="password" v-model="xpwd2" id="sname" required lay-verify="required" placeholder="再次输入新密码" class="layui-input" style="width:200px"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal" v-on:click="Pwd">完成</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><br />
+
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                uaccount: sessionStorage.getItem("UAccount"),
+                uphone: sessionStorage.getItem("UPhone"),
+                uid: sessionStorage.getItem("UId"),
+                uname1: sessionStorage.getItem("UName"),
+                name: "",
+                uname: "",
+                phone: ""
+            },
+            methods: {
+                Fan: function () {
+                    var h = this;
+                    var uid = h.uid;
+                    axios
+                        .get('@ViewBag.url/api/Center/Fan?id=' + uid)
+                        .then(function (i) {
+                            h.uname = i.data[0].uName;
+                            h.phone = i.data[0].uPhone;
+                            $("#sname1").val(h.uname);
+                            $("#sname2").val(h.phone);
+                        })
+                },
+                XuiGai: function () {
+                    var h = this;
+                    var name = $("#sname1").val();
+                    var phone = $("#sname2").val();
+                    var uid = h.uid;
+                    axios
+                        .get('@ViewBag.url/api/Center/ZL',
+                            {
+                                params: {
+                                    id: uid,
+                                    name: name,
+                                    phone: phone,
+                                }
+                            })
+                        .then(function (i) {
+                            h.a = parseInt(i.data);
+                            if (h.a > 0) {
+                                alert('修改成功！！');
+                            }
+                            else {
+                                alert('修改失败！！');
+                            }
+                        })
+                },
+                Pwd: function () {
+                    var ch = this;
+                    var p1 = ch.jpwd;
+                    var p2 = ch.xpwd1;
+                    var p3 = ch.xpwd2;
+                    var uid = ch.uid;
+                    if (p2 == p3) {
+                        axios
+                            .get('@ViewBag.url/api/Center/KeHuPwd', {
+                                params: {
+                                    id: uid,
+                                    jpwd: p1,
+                                    xpwd: p2,
+                                }
+                            })
+                            .then(function (i) {
+                                ch.update = parseInt(i.data);
+                                if (ch.update > 0) {
+                                    alert('修改成功！！！');
+                                    location.href = '//';
+                                }
+                                else {
+                                    alert('修改失败,旧密码错误！！！');
+                                }
+                            })
+                    }
+                    else {
+                        alert('俩次密码输入的不一样，请从新输入！！');
+                    }
+                }
+            }
+        })
+    </script>
+}
+

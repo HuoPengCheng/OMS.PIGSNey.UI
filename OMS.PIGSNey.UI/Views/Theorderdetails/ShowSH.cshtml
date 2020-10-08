@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewData["Title"] = "ShowSH";
+}
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
+<h1>ShowSH</h1>
+<div id="app">
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>开始日期</td>
+            <td><input id="Text1" type="date" v-model="st" class="form-control" /></td>
+            <td>-</td>
+            <td>结束日期</td>
+            <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
+            <td><input id="Text1" type="text" v-model="name" lay-verify="required" class="layui-input" placeholder="根据商品订单查询" /></td>
+            <td>
+                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show"><i class="layui-icon layui-icon-search"></i></button>
+            </td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <thead>
+            <tr>
+                <td>订单编号</td>
+                <td>商品类型</td>
+                <td>商品型号</td>
+                <td>维修等级</td>
+                <td>维修理由</td>
+                <td>维修原因</td>
+                <td>  地址  </td>
+                <td>详细地址</td>
+                <td>申请日期</td>
+                <td>申请人</td>
+                <td>维修状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody v-for="i in emps">
+            <tr>
+                <td>{{i.ordernumber}}</td>
+                <td>{{i.type}}</td>
+                <td>{{i.marque}}</td>
+                <td>
+                    {{i.degree==1?"日常":i.degree==2? "应急":"紧急"}}
+                </td>
+                <td>{{i.cause}}</td>
+                <td>{{i.reason}}</td>
+                <td>{{i.address}}</td>
+                <td>{{i.detailedAddress}}</td>
+                <td>{{i.date}}</td>
+                @*<td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":"已完成"}}</td>*@
+                <td>{{i.uName}}</td>
+                <td v-if="i.state==0">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" title="审核" v-on:click="ShenHe(i.urdId,i.uId)"><i class="layui-icon layui-icon-add-circle"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="驳回" v-on:click="BoHui(i.urdId,i.uId)"><i class="layui-icon layui-icon-reduce-circle"></i></button>
+                    </div>
+                </td>
+                <td v-if="i.state!=0">{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
+                <td>
+                    <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
+            <td>共有<span>{{zongyeshu}}</span>页</td>
+            <td>当前是第<span>{{dangqianye}}</span>页</td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="First" value="首页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Prv" value="上一页" /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Next" value="下一页 " /></td>
+            <td><input id="Button1" class="btn btn-group" type="button" v-on:click="Last" value="尾页" /></td>
+        </tr>
+    </table>
+
+
+
+    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="XXX"
+         style="position: absolute;top: 0;left: 0">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="." method="post" class="form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">订单编号:</label>
+                            <label for="inputEmail3">{{ddbh}}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">商品类型:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{splx}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">商品型号:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{spxh}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修等级:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxdj==1?"日常":wxdj==2? "应急":"紧急"}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修原因:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxyy}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">  地址:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{dz}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">详细地址:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{xxdz}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">申请日期:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{sqrq}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">维修状态:</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">{{wxzt==0?"待审核":wxzt==1?"待维修":wxzt==2?"维修中":"已完成"}}</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                emps: '',
+                dangqianye: 1,
+                zongyeshu: 1,
+                zongtiaoshu: 1,
+                name: "",
+                st: "",
+                et: "",
+                ddbh: "",
+                splx: "",
+                spxh: "",
+                wxdj: "",
+                wxyy: "",
+                dz: "",
+                xxdz: "",
+                sqrq: "",
+                wxzt: ""
+            },
+            mounted() {
+                this.Show();
+            },
+            methods: {
+                Show: function () {
+                    var t = this;
+                    var dqy = this.dangqianye;
+                    axios
+                        .get('http://localhost:65300/api/UserGetURDSH', {
+                            params: {
+                                UId: 12,
+                                name: t.name,
+                                strTime: t.st,
+                                endTime: t.et,
+                                PageSize: 5,
+                                CurrPage: dqy,
+                            }
+                        })
+                        .then(function (i) {
+                            t.emps = i.data.masd;
+                            t.zongyeshu = i.data.zongyeshu;
+                            t.zongtiaoshu = i.data.zongtiaoshu;
+                            t.dangqianye = i.data.dangqianye;
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                ShenHe: function (id, ids) {
+                    alert(id);
+                    alert(ids);
+                    axios
+                        .get("http://localhost:65300/api/ShenHe", {
+                            params: {
+                                UrdId: id,
+                                UId: ids,
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("审核通过");
+                                this.Show();
+                            }
+                            else {
+                                alert("通过失败");
+                            }
+                        })
+                },
+                BoHui: function (id, ids) {
+                    axios
+                        .get("http://localhost:65300/api/Bohui", {
+                            params: {
+                                UrdId: id,
+                                UId: ids,
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("驳回申请");
+                                this.Show();
+                            }
+                            else {
+                                alert("通过失败");
+                            }
+                        })
+                },
+                XQ: function (id) {
+                    var t = this
+                    axios
+                        .get("http://localhost:65300/api/UserGetFT?UrdId=" + id)
+                        .then(function (i) {
+                            t.ddbh = i.data[0].ordernumber,
+                                t.splx = i.data[0].type,
+                                t.spxh = i.data[0].marque,
+                                t.wxdj = i.data[0].degree,
+                                t.wxyy = i.data[0].reason,
+                                t.dz = i.data[0].address,
+                                t.xxdz = i.data[0].detailedAddress,
+                                t.sqrq = i.data[0].date,
+                                t.wxzt = i.data[0].state,
+                                t.name = i.data[0].ordernumber
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                First: function () {
+                    this.dangqianye = 1;
+                    this.Show();
+                },
+                Prv: function () {
+                    this.dangqianye--;
+                    if (this.dangqianye < 1) {
+                        alert("已经是第一页了");
+                        this.dangqianye++;
+                    }
+                    this.Show();
+                },
+                Next: function () {
+                    this.dangqianye++;
+                    if (this.dangqianye > this.zongyeshu) {
+                        alert("已经是最后一页了");
+                        this.dangqianye--;
+                    }
+                    this.Show();
+                },
+                Last: function () {
+                    this.dangqianye = this.zongyeshu;
+                    this.Show();
+                },
+            }
+        })
+    </script>
+
+}

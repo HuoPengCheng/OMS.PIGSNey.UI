@@ -4,61 +4,115 @@
 }
 
 <h1>Index</h1>
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<link href="~/css/style.css" rel="stylesheet" />
 
-<table>
-    <tr>
-        <td>
-            账号:
-            <input id="Text1" type="text" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            密码:
-            <input id="Password1" type="password" />
-            <input id="Text2" type="text" />
-            <input id="Button2" type="button" value="button" onclick="yzm()" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            验证码:
-            
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <input id="Button1" type="button" value="登录" onclick="Deng()" />
-        </td>
-    </tr>
-</table>
-<script>
-    function yzm() {
-        $.ajax({
-            url: "http://api.feige.ee/SmsService/Template",
-            type: "post",
-            dataType: "json",
-            success: function (d) {
-              
-            }
 
-        })
-    }
-    function Deng() {
-        $.ajax({
-            url: "http://localhost:65300/api/Denglu",
-            data: { name: $("#Text1").val(), pass: $("#Password1").val() },
-            type: "get",
-            dataType: "json",
-            success: function (d) {
-                if (d > 0) {
-                    alert("登录成功");
+<div id="app">
+    <div class="padding-all">
+        <div class="header">
+            <h1>Master  Login Form</h1>
+        </div>
+
+        <div class="design-w3l">
+            <div class="mail-form-agile">
+                <form action="#" method="post">
+                    <input type="text" name="name" v-model="name" placeholder="User Name  or  email..." required="" />
+                    <input type="password" name="password" v-model="mima" class="padding" placeholder="Password" required="" />
+                    <input type="submit" value="登录" v-on:click="Denglu">
+                </form>
+            </div>
+            <div class="clear"> </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2017  Master  Login form. All Rights Reserved | Design by  <a href="https://w3layouts.com/">  w3layouts </a></p>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                name: "",
+                mima: "",
+                uId: "",
+                uName: "",
+                uAccount: "",
+                uPwd: "",
+                uPhone: "",
+                uState: "",
+            },
+
+            mounted() {
+
+
+            },
+
+            methods: {
+                Denglu: function () {
+                    var t = this;
+                    var name = t.name;
+                    axios
+                        .get("http://localhost:65300/api/Denglu", {
+                            params: {
+                                name: t.name,
+                                pass: t.mima,
+                            }
+                        })
+                        .then(function (i) {
+                             t.a = parseInt(i.data);
+                            if (t.a > 0) {
+                                t.session();
+                                alert("登录成功");
+                                location.href = "/Jurisdiction/Moban";
+                              
+                            }
+                            else {
+                                alert("登录失败");
+                            }
+
+
+                        })
+                },
+                session: function () {
+                    var t = this;
+                    axios.get("http://localhost:65300/api/Session", {
+                        params: {
+                            name: t.name,
+                            pass: t.mima,
+                        }
+
+                    })
+                        .then(function (d) {
+                            t.uId = d.data[0].uId;
+                            t.rId = d.data[0].rId;
+                            t.uName = d.data[0].uName;
+                            t.uAccount = d.data[0].uAccount;
+                            t.uPwd = d.data[0].uPwd;
+                            t.uPhone = d.data[0].uPhone;
+                            t.uState = d.data[0].uState;
+                            sessionStorage.setItem("UId", t.uId);
+                            sessionStorage.setItem("RId", t.rId);
+                            sessionStorage.setItem("UName", t.uName);
+                            sessionStorage.setItem("UAccount", t.uAccount);
+                            sessionStorage.setItem("UPwd", t.uPwd);
+                            sessionStorage.setItem("UPhone", t.uPhone);
+                            sessionStorage.setItem("UState", t.uState);
+                        });
+                   
+                    ////alert(sessionStorage.getItem("UName"));
+                    //alert(sessionStorage.getItem("UAccount"));
+                    //alert(sessionStor0age.getItem("UPwd"));
+                    ////alert(sessionStorage.getItem("UState"));
+
                 }
-                else {
-                    alert("登录失败");
-                }
-            }
-
+                
+                
+            },
         })
-    }
-</script>
+    </script>
+}

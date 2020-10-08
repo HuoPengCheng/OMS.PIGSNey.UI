@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewData["Title"] = "Moban";
+}
+
+<h1>Moban</h1>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <script src="~/js/jquery-3.3.1.js"></script>
+    <script src="~/layui-v2.5.6/layui/layui.js"></script>
+    <link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+
+    @*<link rel="stylesheet" href="../src/css/layui.css">*@
+</head>
+<body class="layui-layout-body">
+    <div>
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header">
+                <div class="layui-logo">layui 后台布局</div>
+                <!-- 头部区域（可配合layui已有的水平导航） -->
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            <img  src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                            <span id="tb"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="">基本资料</a></dd>
+                            <dd><a href="">安全设置</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a href="">退了</a></li>
+                </ul>
+            </div>
+
+            <div class="layui-side layui-bg-black" v-for="i in message">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test" id="app">
+                    </ul>
+                </div>
+            </div>
+
+            <div class="layui-body">
+                <!-- 内容主体区域 -->
+                <iframe id="tz"  style="height:100%;width:100%;" name="main_self_frame" frameborder="0" class="layadmin-iframe">
+                </iframe>
+
+            </div>
+
+            <div class="layui-footer">
+                <!-- 底部固定区域 -->
+                © layui.com - 底部固定区域
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+</html>
+@section scripts{
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+
+        $(function () {
+
+            Menu();
+            alert(sessionStorage.getItem("UName"));
+            $("#tb").val(sessionStorage.getItem("UName"));
+        })
+        var rid = sessionStorage.getItem("RId");
+        function Menu() {
+            $.ajax({
+                url: "@ViewBag.url/api/Moban?rid=" + rid,
+                type: "get",
+                dataType: "json",
+                success: function (d) {
+                    $("#app").empty();
+                    $(d).each(function () {
+                        var str = '<li class="layui-nav-item layui-nav-itemed">';
+                        str += '<a  class="" href="javascript:;">' + this.pName + '</a>';
+                        Mode(this.pId);
+                        str += '<dl id="' + this.pId + '" Class="layui-nav-child">';
+                        str += '</dl>';
+                        str += '</li>';
+                        $("#app").append(str);
+                    })
+
+                }
+
+
+            })
+
+
+
+        }
+        function Mode(id) {
+            
+            $.ajax({
+                url: "http://localhost:65300/api/ej?id=" + id,
+                data: { rid: rid},
+                type: "get",
+                dataType: "json",
+                success: function (d) {
+                    $("#"+id).empty();
+                    $(d).each(function () {
+                        var str = '<dd><a href="javascript:TZYM(\''+ this.url+'\');">' + this.pName + '</a></dd>';
+                        $("#" + id).append(str);
+                    })
+
+                }
+            })
+        }
+        function TZYM(type) {
+            //src拼接跳转页面 要跳转那个页面 请参考员工签到对应的字母 /控制器名字/方法名 列如‘/Interface/Add'
+            switch (type) {
+                case "a":
+                    document.getElementById("tz").src = '/XY/MaterialShow';
+                    break;
+                case "b":
+                    document.getElementById("tz").src = '/XY/ToolShenHe';
+                    break;
+                case "c":
+                    document.getElementById("tz").src = '/XY/ToolShow';
+                    break;
+                case "d":
+                    document.getElementById("tz").src = '/XY/ToolShenHe';
+                    break;
+                 case "e":
+                    document.getElementById("tz").src = '/Theorderdetails/Show';
+                    break;
+                case "f":
+                    document.getElementById("tz").src = '/Theorderdetails/Add';
+                    break;
+                case "g":
+                    document.getElementById("tz").src = '/Theorderdetails/ShowSH';
+                    break;
+                case "h":
+                    document.getElementById("tz").src = '/Center/WeiXui';
+                    break;
+                case "i":
+                    document.getElementById("tz").src = '/Center/GeRenWx';
+                    break;
+                case "j":
+                    document.getElementById("tz").src = '/Center/GuanLi';
+                    break;
+                case "k":
+                    document.getElementById("tz").src = '/MoneyMessage/AddFinace';
+                    break;
+                case "l":
+                    document.getElementById("tz").src = '/MoneyMessage/ShowFinace';
+                    break;
+                case "m":
+                    document.getElementById("tz").src = '/Manpower/RecyclebinShow';
+                    break;
+                case "n":
+                    document.getElementById("tz").src = '/Inter/Cb';
+                    break;
+                case "o":
+                    document.getElementById("tz").src = '/Inter/Bf';
+                    break;
+                case "p":
+                    document.getElementById("tz").src = '/Complaints/UserShow';
+                    break;
+                case "q":
+                    document.getElementById("tz").src = '/Complaints/Show';
+                    break;
+                case "r":
+                    document.getElementById("tz").src = '/Manpower/Music';
+                    break;
+                case "s":
+                    document.getElementById("tz").src = '/Manpower/Music';  
+                default:
+            }
+        }
+        function resize(obj) {
+
+            var ifrm = obj.contentWindow.document.body;
+
+            ifrm.style.cssText = "margin:0px;padding:0px";
+
+            overflow: hidden;
+
+            var div = document.createElement("img");
+
+            div.src = obj.src;
+
+            obj.height = div.height;
+
+            obj.width = div.width;
+        }
+    </script>
+}

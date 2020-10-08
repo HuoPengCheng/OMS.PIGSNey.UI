@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+}
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<script src="~/js/area.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+<div class="info">
+    <div>
+        <table class="layui-table" lay-even="" lay-skin="nob">
+            <tr>
+                <td>地址</td>
+                <td><select id="s_province" name="s_province" class="form-control"></select></td>
+                <td><select id="s_city" name="s_city" class="form-control"></select></td>
+                <td><select id="s_county" name="s_county" class="form-control"></select></td>
+            </tr>
+        </table>
+        <script class="resources library" src="area.js" type="text/javascript"></script>
+        <script type="text/javascript">_init_area();</script>
+    </div>
+    <div id="show"></div>
+</div>
+<div id="app">
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>详细地址</td>
+            <td><textarea id="xxdz" rows="2" cols="20" class="form-control"></textarea></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>报修商品类型</td>
+            <td>
+                <select v-model="options" v-on:change="Drop2(options)" id="drop" class="form-control">
+                    <option v-for="(item,index) in Options" :key="index" :value="item.cId">{{item.cName}}</option>
+                </select>
+            </td>
+            <td>报修商品型号</td>
+            <td>
+                <select class="form-control" id="drop1">
+                    <option v-for="(item,index) in Options1" :key="index" :value="item.cId">{{item.cName}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>报修原因</td>
+            <td>
+                <select id="bxyy" class="form-control">
+                    <option>运输损坏</option>
+                    <option>软件故障</option>
+                    <option>硬件故障</option>
+                    <option>过失损坏</option>
+                    <option>  其他  </option>
+                </select>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>报修理由</td>
+            <td><textarea id="bxly" rows="2" cols="20" class="form-control"></textarea></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+        <tr>
+            <td>发送图片</td>
+            <td>
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        预览图：
+                        <div class="layui-upload-list" id="demo2"></div>
+                    </blockquote>
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="layui-table" lay-even="" lay-skin="nob">
+
+        <tr>
+            <td colspan="4">
+                <button type="button" class="layui-btn layui-btn-normal" v-on:click="Add()"><i class="layui-icon layui-icon-upload">提交</i></button>
+            </td>
+        </tr>
+    </table>
+</div>
+@section scripts{
+
+    <script class="resources library" src="~/js/area.js" type="text/javascript"></script>
+    <script type="text/javascript">_init_area();</script>
+    <script type="text/javascript">
+
+        var Gid = document.getElementById;
+
+        var showArea = function () {
+
+            document.getElementById('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" +
+
+                document.getElementById('s_city').value + " - 县/区" +
+
+                document.getElementById('s_county').value + "</h3>"
+
+        }
+        document.getElementById('s_county').setAttribute('onchange', 'showArea()');
+    </script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                Options: "",
+                options: "1",
+                Options1: "",
+                options1: "1",
+            },
+            mounted() {
+                this.Drop1();
+            },
+            methods: {
+                Drop1: function () {
+                    var t = this;
+                    axios
+                        .get("@ViewBag.url/api/CommodityDetailstbGetType")
+                        .then(function (i) {
+                            t.Options = i.data;
+                            t.Drop2(t.options);
+                        })
+                        //.then(reponseData => {
+                        //    t.Options = reponseData.data;
+                        //    this.Drop2(t.options);
+                        //})
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+                },
+                Drop2: function (id) {
+                    var t = this;
+                    axios
+                        .get("@ViewBag.url/api/CommodityDetailstbGetMarque?CId=" + id)
+                        .then(function (i) {
+                            t.Options1 = i.data;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+                },
+                Add: function () {
+                    var a = $("#bxly").val();
+                    var b = $("#drop option:selected").text();
+                    var c = $("#drop1 option:selected").text();
+                    var d = $("#s_province option:selected").text() + $("#s_city option:selected").text() + $("#s_county option:selected").text();
+                    var e = $("#bxyy option:selected").text();
+                    var f = $("#xxdz").val();
+                    var g = i;
+                    var t = this;
+                    axios
+                        .get("http://localhost:65300/api/AddUserRepairsDetailstb", {
+                            params: {
+                                Type: b,
+                                Marque: c,
+                                Cause: e,
+                                Reason: a,
+                                Address: d,
+                                DetailedAddress: f,
+                                UId: 11,
+                                Img: g
+                            }
+                        })
+                        .then(function (i) {
+                            if (i.data > 0) {
+                                alert("添加成功");
+                            }
+                            else {
+                                alert("添加失败");
+                            }
+                        })
+                }
+            }
+        })
+    </script>
+    <script>
+        var i = "";
+        layui.use('upload', function () {
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            //多图片上传
+            upload.render({
+                elem: '#test2'
+                , url: 'https://httpbin.org/post' //改成您自己的上传接口
+                , multiple: true
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo2').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">')
+                        i = file.name;
+                        alert(i);
+                    });
+                }
+                , done: function (res) {
+                    //上传完毕
+                }
+            });
+
+            //绑定原始文件域
+            upload.render({
+                elem: '#test20'
+                , url: 'https://httpbin.org/post' //改成您自己的上传接口
+                , done: function (res) {
+                    layer.msg('上传成功');
+                    console.log(res)
+                }
+            });
+
+        });
+    </script>
+}
