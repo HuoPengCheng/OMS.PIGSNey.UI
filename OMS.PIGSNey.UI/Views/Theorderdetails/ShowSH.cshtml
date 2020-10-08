@@ -5,20 +5,25 @@
 
 <script src="~/js/vue.js"></script>
 <script src="~/js/axios.js"></script>
+<link href="~/layui-v2.5.6/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+
 <h1>ShowSH</h1>
 <div id="app">
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <tr>
             <td>开始日期</td>
             <td><input id="Text1" type="date" v-model="st" class="form-control" /></td>
             <td>-</td>
             <td>结束日期</td>
             <td><input id="Text1" type="date" v-model="et" class="form-control" /></td>
-            <td><input id="Text1" type="text" v-model="name" placeholder="根据商品订单查询" /></td>
-            <td><input id="Button1" type="button" value="查询" v-on:click="Show" /></td>
+            <td><input id="Text1" type="text" v-model="name" lay-verify="required" class="layui-input" placeholder="根据商品订单查询" /></td>
+            <td>
+                <button type="button" class="layui-btn layui-btn-radius" v-on:click="Show"><i class="layui-icon layui-icon-search"></i></button>
+            </td>
         </tr>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <thead>
             <tr>
                 <td>订单编号</td>
@@ -50,15 +55,20 @@
                 <td>{{i.date}}</td>
                 @*<td>{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":"已完成"}}</td>*@
                 <td>{{i.uName}}</td>
-                <td v-if="i.state==0"><input id="Button1" type="button" value="审核" v-on:click="ShenHe(i.urdId,i.uId)" /><input id="Button1" type="button" value="驳回" v-on:click="BoHui(i.urdId,i.uId)"/></td>
+                <td v-if="i.state==0">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm" title="审核" v-on:click="ShenHe(i.urdId,i.uId)"><i class="layui-icon layui-icon-add-circle"></i></button>
+                        <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="驳回" v-on:click="BoHui(i.urdId,i.uId)"><i class="layui-icon layui-icon-reduce-circle"></i></button>
+                    </div>
+                </td>
                 <td v-if="i.state!=0">{{i.state==0?"待审核":i.state==1?"待维修":i.state==2?"维修中":i.state==3?"已完成":"驳回"}}</td>
                 <td>
-                    <input class="btn btn-group" id="Button1" data-toggle="modal" data-target="#addClass" type="button" value="查看订单" v-on:click="XQ(i.urdId)" />
+                    <button type="button" style="margin-top:5px" class="layui-btn layui-btn-sm" title="查看详情" data-toggle="modal" data-target="#addClass" v-on:click="XQ(i.urdId)"><i class="layui-icon layui-icon-survey"></i></button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
+    <table class="layui-table" lay-even="" lay-skin="nob">
         <tr>
             <td>共有<span>{{zongtiaoshu}}</span>条数据</td>
             <td>共有<span>{{zongyeshu}}</span>页</td>
@@ -160,7 +170,7 @@
                     var t = this;
                     var dqy = this.dangqianye;
                     axios
-                        .get('@ViewBag.url/api/UserGetURDSH', {
+                        .get('http://localhost:65300/api/UserGetURDSH', {
                             params: {
                                 UId: 12,
                                 name: t.name,
@@ -180,20 +190,20 @@
                             console.log(error);
                         });
                 },
-                ShenHe: function (id,ids) {
+                ShenHe: function (id, ids) {
                     alert(id);
                     alert(ids);
                     axios
-                        .get("@ViewBag.url/api/ShenHe", {
-                            params:{
-                                UrdId:id,
-                                UId:ids,
+                        .get("http://localhost:65300/api/ShenHe", {
+                            params: {
+                                UrdId: id,
+                                UId: ids,
                             }
                         })
                         .then(function (i) {
                             if (i.data > 0) {
                                 alert("审核通过");
-                                t.Show();
+                                this.Show();
                             }
                             else {
                                 alert("通过失败");
@@ -202,7 +212,7 @@
                 },
                 BoHui: function (id, ids) {
                     axios
-                        .get("@ViewBag.url/api/Bohui", {
+                        .get("http://localhost:65300/api/Bohui", {
                             params: {
                                 UrdId: id,
                                 UId: ids,
@@ -211,7 +221,7 @@
                         .then(function (i) {
                             if (i.data > 0) {
                                 alert("驳回申请");
-                                t.Show();
+                                this.Show();
                             }
                             else {
                                 alert("通过失败");
@@ -221,7 +231,7 @@
                 XQ: function (id) {
                     var t = this
                     axios
-                        .get("@ViewBag.url/api/UserGetFT?UrdId=" + id)
+                        .get("http://localhost:65300/api/UserGetFT?UrdId=" + id)
                         .then(function (i) {
                             t.ddbh = i.data[0].ordernumber,
                                 t.splx = i.data[0].type,
